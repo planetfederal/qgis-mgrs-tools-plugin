@@ -1,0 +1,12 @@
+..\mgrs\core.py
+..\mgrs\__init__.py
+..\mgrs\core.pyc
+..\mgrs\__init__.pyc
+..\libmgrs.dll
+.\
+dependency_links.txt
+not-zip-safe
+PKG-INFO
+requires.txt
+SOURCES.txt
+top_level.txt
