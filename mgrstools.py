@@ -4,6 +4,8 @@ import mgrs
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 from qgis.core import *
+from qgis.gui import *
+from qgis.utils import *
 from maptool import MGRSMapTool
 from coorddialog import MGRSCoordInputDialog
 from qgis.utils import iface
@@ -52,10 +54,28 @@ class MGRSTools:
             newExtent = QgsRectangle(pt.x() - w, pt.y() - h, pt.x() + w, pt.y() + h)
             canvas.setExtent(newExtent)
             canvas.refresh()
+            m = QgsVertexMarker(canvas)
+            m.setCenter(pt)
+            m.setIconSize(8)
+            m.setPenWidth(4)
+
+            def timer_fired():
+                self.iface.mapCanvas().scene().removeItem(m)
+                timer.stop()
+             
+            timer = QTimer()
+            timer.timeout.connect(timer_fired)
+            timer.setSingleShot(True)
+            timer.start(5000)
 
     def unsetTool(self, tool):
-        if not isinstance(tool, MGRSMapTool):
-            self.toolAction.setChecked(False)
+        try:
+            if not isinstance(tool, MGRSMapTool):
+                self.toolAction.setChecked(False)
+        except:
+            pass
+            #ignore exceptions throw when unloading plugin, since map tool class might not exist already
+
 
     def setTool(self):
         self.toolAction.setChecked(True)
