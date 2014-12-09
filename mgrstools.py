@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import mgrs
+import math
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 from qgis.core import *
@@ -46,16 +47,20 @@ class MGRSTools:
             canvas = iface.mapCanvas()
             canvasCrs = canvas.mapRenderer().destinationCrs() 
             epsg4326 = QgsCoordinateReferenceSystem("EPSG:4326")
-            transform = QgsCoordinateTransform(epsg4326, canvasCrs)
-            pt = transform.transform(lon, lat) 
-            extent = canvas.extent()
-            w = extent.width()/2.0
-            h = extent.height()/2.0
-            newExtent = QgsRectangle(pt.x() - w, pt.y() - h, pt.x() + w, pt.y() + h)
+            transform4326 = QgsCoordinateTransform(epsg4326, canvasCrs)
+            center = transform4326.transform(lon, lat)             
+            precision = 5 - math.floor((len(dlg.mgrsCoord) - 5) / 2) 
+            dist = math.pow(10, precision) / 2
+            R = 6378137
+            dLat = dist / R
+            dLon = dist / (R * math.cos(math.pi * lat / 180))
+            pt1 = transform4326.transform(lon - dLon * 180 / math.pi , lat - dLat * 180 / math.pi) 
+            pt2 = transform4326.transform(lon + dLon * 180 / math.pi , lat + dLat * 180 / math.pi)
+            newExtent = QgsRectangle(pt1.x(), pt1.y(), pt2.x(), pt2.y())
             canvas.setExtent(newExtent)
             canvas.refresh()
             m = QgsVertexMarker(canvas)
-            m.setCenter(pt)
+            m.setCenter(center)
             m.setIconSize(8)
             m.setPenWidth(4)
 
@@ -74,7 +79,7 @@ class MGRSTools:
                 self.toolAction.setChecked(False)
         except:
             pass
-            #ignore exceptions throw when unloading plugin, since map tool class might not exist already
+            #ignore exceptions thrown when unloading plugin, since map tool class might not exist already
 
 
     def setTool(self):
