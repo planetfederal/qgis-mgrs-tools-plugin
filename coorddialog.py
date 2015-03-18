@@ -42,10 +42,10 @@ class MGRSCoordInputDialog(QtGui.QDialog):
     
     def okPressed(self):
         try:
-            self.mgrsCoord = self.coordBox.text()
-            self.latlon = mgrs.MGRS().toLatLon(str(self.mgrsCoord))            
+            self.mgrsCoord = str(self.coordBox.text()).replace(" ", "")
+            self.latlon = mgrs.MGRS().toLatLon(self.mgrsCoord)           
             self.close()
-        except Exception, e:            
+        except Exception, e:         
             self.coordBox.setStyleSheet("QLineEdit{background: yellow}")
 
     def cancelPressed(self):
