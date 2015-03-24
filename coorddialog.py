@@ -1,14 +1,14 @@
 import mgrs
 from PyQt4 import QtGui, QtCore
 from qgis.core import *
+from qgis.gui import *
+from qgis.utils import *
 
 class MGRSCoordInputDialog(QtGui.QDialog):
     
-    ct = mgrs.MGRS()
-
-    def __init__(self, parent = None):
+    def __init__(self, canvas, parent = None):
         super(MGRSCoordInputDialog, self).__init__(parent)
-        self.latlon = None        
+        self.canvas = canvas
         self.initGui()        
         
     def initGui(self):                         
@@ -38,17 +38,27 @@ class MGRSCoordInputDialog(QtGui.QDialog):
         self.buttonBox.rejected.connect(self.cancelPressed)
         
         self.resize(350,150)
-            
+
+        self.marker = None
     
     def okPressed(self):
         try:
             self.mgrsCoord = str(self.coordBox.text()).replace(" ", "")
-            self.latlon = mgrs.MGRS().toLatLon(self.mgrsCoord)           
-            self.close()
-        except Exception, e:         
+            lat, lon = mgrs.MGRS().toLatLon(self.mgrsCoord) 
+            canvasCrs = self.canvas.mapRenderer().destinationCrs() 
+            epsg4326 = QgsCoordinateReferenceSystem("EPSG:4326")
+            transform4326 = QgsCoordinateTransform(epsg4326, canvasCrs)
+            center = transform4326.transform(lon, lat)             
+            self.canvas.zoomByFactor(1, center)
+            self.canvas.refresh()
+            if self.marker is None:
+                self.marker = QgsVertexMarker(self.canvas)
+            self.marker.setCenter(center)
+            self.marker.setIconSize(8)
+            self.marker.setPenWidth(4)
+        except Exception, e: 
+            print e        
             self.coordBox.setStyleSheet("QLineEdit{background: yellow}")
 
     def cancelPressed(self):
-        self.latlon = None        
-        self.mgrsCoord = None
         self.close()  
