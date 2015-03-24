@@ -36,11 +36,12 @@ class MGRSTools:
 
         self.iface.mapCanvas().mapToolSet.connect(self.unsetTool)
 
+        self.zoomTo = MGRSCoordInputDialog(self.iface.mapCanvas(), self.iface.mainWindow())
+        self.iface.addDockWidget(Qt.TopDockWidgetArea, self.zoomTo)
+        self.zoomTo.hide()
+
     def zoomTo(self):
-        dlg = MGRSCoordInputDialog(self.iface.mapCanvas(), self.iface.mainWindow())
-        dlg.exec_()
-        if dlg.marker is not None:
-            self.iface.mapCanvas().scene().removeItem(dlg.marker)
+        self.zoomTo.show()
 
     def unsetTool(self, tool):
         try:

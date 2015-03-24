@@ -4,47 +4,41 @@ from qgis.core import *
 from qgis.gui import *
 from qgis.utils import *
 
-class MGRSCoordInputDialog(QtGui.QDialog):
-    
-    def __init__(self, canvas, parent = None):
-        super(MGRSCoordInputDialog, self).__init__(parent)
-        self.canvas = canvas
-        self.initGui()        
-        
-    def initGui(self):                         
-        self.setWindowTitle('MGRS Coordinate')
-        verticalLayout = QtGui.QVBoxLayout()                                            
-                
-        horizontalLayout = QtGui.QHBoxLayout()
-        horizontalLayout.setSpacing(30)
-        horizontalLayout.setMargin(0)        
-        coordLabel = QtGui.QLabel('MGRS coordinate to zoom to')        
-        self.coordBox = QtGui.QLineEdit()        
-        horizontalLayout.addWidget(coordLabel)
-        horizontalLayout.addWidget(self.coordBox)
-        verticalLayout.addLayout(horizontalLayout)
-                      
-        self.groupBox = QtGui.QGroupBox()
-        self.groupBox.setLayout(verticalLayout)
-        
-        layout = QtGui.QVBoxLayout()
-        layout.addWidget(self.groupBox) 
-        self.buttonBox = QtGui.QDialogButtonBox(QtGui.QDialogButtonBox.Ok | QtGui.QDialogButtonBox.Cancel)
-        layout.addWidget(self.buttonBox)
-        
-        self.setLayout(layout)
-          
-        self.buttonBox.accepted.connect(self.okPressed)
-        self.buttonBox.rejected.connect(self.cancelPressed)
-        
-        self.resize(350,150)
+ITEMHEIGHT = 30
+OFFSET = 20
+HEIGHT = 60
 
+
+class MGRSCoordInputDialog(QtGui.QDockWidget):
+    def __init__(self, canvas, parent):
+        self.canvas = canvas
         self.marker = None
-    
-    def okPressed(self):
+        QtGui.QDockWidget.__init__(self, parent)
+        self.setAllowedAreas(QtCore.Qt.TopDockWidgetArea)
+        self.initGui()
+
+    def initGui(self):
+        self.label = QtGui.QLabel('MGRS coordinate to zoom to')        
+        self.coordBox = QtGui.QLineEdit()        
+        self.zoomToButton = QtGui.QPushButton("Zoom to")
+        self.zoomToButton.clicked.connect(self.zoomToPressed)
+        self.removeMarkerButton = QtGui.QPushButton("Remove marker")
+        self.removeMarkerButton.clicked.connect(self.closePressed)
+        self.hlayout = QtGui.QHBoxLayout()
+        self.hlayout.setSpacing(6)
+        self.hlayout.setMargin(9)
+        self.hlayout.addWidget(self.label)
+        self.hlayout.addWidget(self.coordBox)
+        self.hlayout.addWidget(self.zoomToButton)
+        self.hlayout.addWidget(self.removeMarkerButton)
+        self.dockWidgetContents = QtGui.QWidget()
+        self.dockWidgetContents.setLayout(self.hlayout)
+        self.setWidget(self.dockWidgetContents)
+
+    def zoomToPressed(self):
         try:
-            self.mgrsCoord = str(self.coordBox.text()).replace(" ", "")
-            lat, lon = mgrs.MGRS().toLatLon(self.mgrsCoord) 
+            mgrsCoord = str(self.coordBox.text()).replace(" ", "")
+            lat, lon = mgrs.MGRS().toLatLon(mgrsCoord) 
             canvasCrs = self.canvas.mapRenderer().destinationCrs() 
             epsg4326 = QgsCoordinateReferenceSystem("EPSG:4326")
             transform4326 = QgsCoordinateTransform(epsg4326, canvasCrs)
@@ -56,9 +50,8 @@ class MGRSCoordInputDialog(QtGui.QDialog):
             self.marker.setCenter(center)
             self.marker.setIconSize(8)
             self.marker.setPenWidth(4)
-        except Exception, e: 
-            print e        
+        except Exception, e:    
             self.coordBox.setStyleSheet("QLineEdit{background: yellow}")
 
-    def cancelPressed(self):
-        self.close()  
+    def removeMarkerPressed(self):
+        self.canvas.scene().removeItem(self.marker)
