@@ -4,11 +4,6 @@ from qgis.core import *
 from qgis.gui import *
 from qgis.utils import *
 
-ITEMHEIGHT = 30
-OFFSET = 20
-HEIGHT = 60
-
-
 class MGRSCoordInputDialog(QtGui.QDockWidget):
     def __init__(self, canvas, parent):
         self.canvas = canvas
@@ -23,7 +18,8 @@ class MGRSCoordInputDialog(QtGui.QDockWidget):
         self.zoomToButton = QtGui.QPushButton("Zoom to")
         self.zoomToButton.clicked.connect(self.zoomToPressed)
         self.removeMarkerButton = QtGui.QPushButton("Remove marker")
-        self.removeMarkerButton.clicked.connect(self.closePressed)
+        self.removeMarkerButton.clicked.connect(self.removeMarker)
+        self.removeMarkerButton.setDisabled(True)
         self.hlayout = QtGui.QHBoxLayout()
         self.hlayout.setSpacing(6)
         self.hlayout.setMargin(9)
@@ -50,8 +46,9 @@ class MGRSCoordInputDialog(QtGui.QDockWidget):
             self.marker.setCenter(center)
             self.marker.setIconSize(8)
             self.marker.setPenWidth(4)
+            self.removeMarkerButton.setDisabled(False)
         except Exception, e:    
             self.coordBox.setStyleSheet("QLineEdit{background: yellow}")
 
-    def removeMarkerPressed(self):
+    def removeMarker(self):
         self.canvas.scene().removeItem(self.marker)
