@@ -26,7 +26,7 @@ The plugin uses the `mgrs library <https://github.com/hobu/mgrs>`_, which itself
 
 /<user folder>/.qgis2/python/plugins/mgrstools/ext-libs/mgrs/
 
-The precision of the conversion is affected by the precision of the MGRS system itself; and, the library does not guarantee that a coordinate conversion back and forth will render the same initial coordinate, as shown in the this example:
+The precision of the conversion is affected by the precision of the MGRS system itself; and, the library does not guarantee that a coordinate conversion back and forth will render the same initial coordinate, as shown in this example:
 
 * A starting coordinate of 42.0, -93.0 (latitude, longitude) gives an MGRS coordinate of '15TWG0000049776' (using the full precision in this case)
 * Converting that into latitude/longitude again, it returns 41.999997975127997, -93.000000000000014
