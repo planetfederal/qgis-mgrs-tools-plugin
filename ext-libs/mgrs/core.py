@@ -24,8 +24,11 @@ if os.name == 'nt':
         raise
 elif os.name == 'posix':
     platform = os.uname()[0]
-    lib_name = 'libmgrs.so'
-    local_library_path = os.path.abspath(os.path.dirname(__file__) + "/..")
+    if platform.lower().startswith('dar'):
+        lib_name = 'libmgrs_mac.so'
+    else:
+        lib_name = 'libmgrs.so'
+    local_library_path = os.path.abspath(os.path.dirname(__file__))
     free = ctypes.CDLL(find_library('c')).free
     rt = ctypes.CDLL(os.path.join(local_library_path, lib_name))
 else:
