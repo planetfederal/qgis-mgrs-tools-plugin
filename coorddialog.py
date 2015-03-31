@@ -52,3 +52,4 @@ class MGRSCoordInputDialog(QtGui.QDockWidget):
 
     def removeMarker(self):
         self.canvas.scene().removeItem(self.marker)
+        self.marker = None
