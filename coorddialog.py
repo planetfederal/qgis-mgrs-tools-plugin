@@ -47,9 +47,14 @@ class MGRSCoordInputDialog(QtGui.QDockWidget):
             self.marker.setIconSize(8)
             self.marker.setPenWidth(4)
             self.removeMarkerButton.setDisabled(False)
+            self.coordBox.setStyleSheet("QLineEdit{background: white}")
         except Exception, e:    
             self.coordBox.setStyleSheet("QLineEdit{background: yellow}")
 
     def removeMarker(self):
         self.canvas.scene().removeItem(self.marker)
         self.marker = None
+
+    def closeEvent(self, evt):
+        if self.marker is not None:
+            self.canvas.scene().removeItem(self.marker)
