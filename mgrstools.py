@@ -23,16 +23,12 @@ class MGRSTools:
                                      self.iface.mainWindow())        
         self.toolAction.triggered.connect(self.setTool)
         self.toolAction.setCheckable(True)
-        self.menu.addAction(self.toolAction)
+        self.iface.addPluginToMenu("MGRS", self.toolAction)
 
         self.zoomToAction = QAction("Zoom to MGRS coordinate",
                                      self.iface.mainWindow())        
         self.zoomToAction.triggered.connect(self.zoomTo)
-        self.menu.addAction(self.zoomToAction)
-
-        menuBar = self.iface.mainWindow().menuBar()
-        menuBar.insertMenu(
-            self.iface.firstRightStandardMenu().menuAction(), self.menu)
+        self.iface.addPluginToMenu("MGRS", self.zoomToAction)
 
         self.iface.mapCanvas().mapToolSet.connect(self.unsetTool)
 
