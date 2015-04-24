@@ -3,6 +3,7 @@ from qgis.core import *
 from qgis.gui import *
 from qgis.utils import iface
 from PyQt4.QtCore import *
+from PyQt4.QtGui import *
 
 class MGRSMapTool(QgsMapTool):
      
@@ -13,18 +14,32 @@ class MGRSMapTool(QgsMapTool):
         QgsMapTool.__init__(self, canvas)        
         self.setCursor(Qt.CrossCursor)
 
-    def canvasMoveEvent(self, e):                
-        pt = self.toMapCoordinates(e.pos())
+    def toMgrs(self, pt):        
         canvas = iface.mapCanvas()
         canvasCrs = canvas.mapRenderer().destinationCrs()         
         transform = QgsCoordinateTransform(canvasCrs, self.epsg4326)
         pt4326 = transform.transform(pt.x(), pt.y())      
         try:
             mgrsCoords = self.ct.toMGRS(pt4326.y(), pt4326.x())
-            iface.mainWindow().statusBar().showMessage("MGRS Coordinate: " + mgrsCoords)
         except:
+            mgrsCoords = None
+
+        return mgrsCoords
+
+    def canvasMoveEvent(self, e):                
+        pt = self.toMapCoordinates(e.pos())
+        mgrsCoord = self.toMgrs(pt)
+        if mgrsCoord:
+            iface.mainWindow().statusBar().showMessage("MGRS Coordinate: " + mgrsCoord)
+        else:
             iface.mainWindow().statusBar().showMessage("")
         
-        
+            
+    def canvasReleaseEvent(self, e):
+        pt = self.toMapCoordinates(e.pos())
+        mgrsCoord = self.toMgrs(pt)
+        if mgrsCoord:
+            clipboard = QApplication.clipboard()
+            clipboard.setText(mgrsCoord)
+            iface.messageBar().pushMessage("", "Coordinate %s copied to clipboard" % mgrsCoord, level=QgsMessageBar.INFO, duration=3)
 
-        
