@@ -14,7 +14,8 @@ class MGRSCoordInputDialog(QtGui.QDockWidget):
 
     def initGui(self):
         self.label = QtGui.QLabel('MGRS coordinate')        
-        self.coordBox = QtGui.QLineEdit()        
+        self.coordBox = QtGui.QLineEdit()      
+        self.coordBox.returnPressed.connect(self.zoomToPressed)  
         self.zoomToButton = QtGui.QPushButton("Zoom to")
         self.zoomToButton.clicked.connect(self.zoomToPressed)
         self.removeMarkerButton = QtGui.QPushButton("Remove marker")
