@@ -15,9 +15,6 @@ class MGRSTools:
 
     def initGui(self):
         self.mapTool = MGRSMapTool(self.iface.mapCanvas())
-        
-        self.menu = QMenu(self.iface.mainWindow().menuBar())        
-        self.menu.setTitle("MGRS Tools")
 
         self.toolAction = QAction("MGRS map tool",
                                      self.iface.mainWindow())        
@@ -53,5 +50,7 @@ class MGRSTools:
         self.iface.mapCanvas().setMapTool(self.mapTool)
 
     def unload(self):
-        self.menu.deleteLater()
+        self.iface.mapCanvas().unsetMapTool(self.mapTool)
+        self.iface.removePluginMenu("MGRS", self.toolAction)
+        self.iface.removePluginMenu("MGRS", self.zoomToAction)
    
