@@ -13,6 +13,7 @@ class MGRSCoordInputDialog(QtGui.QDockWidget):
         self.initGui()
 
     def initGui(self):
+        self.setWindowTitle("MGRS Coordinate Zoom")
         self.label = QtGui.QLabel('MGRS coordinate')        
         self.coordBox = QtGui.QLineEdit()      
         self.coordBox.returnPressed.connect(self.zoomToPressed)  
