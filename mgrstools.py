@@ -22,7 +22,8 @@ class MGRSTools:
         self.toolAction.setCheckable(True)
         self.iface.addPluginToMenu("MGRS", self.toolAction)
 
-        self.zoomToAction = QAction("Zoom to MGRS coordinate",
+        zoomToIcon = QIcon(':/images/themes/default/mActionZoomIn.svg')
+        self.zoomToAction = QAction(zoomToIcon, "Zoom to MGRS coordinate",
                                      self.iface.mainWindow())        
         self.zoomToAction.triggered.connect(self.zoomTo)
         self.iface.addPluginToMenu("MGRS", self.zoomToAction)
