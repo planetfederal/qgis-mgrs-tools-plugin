@@ -16,10 +16,12 @@ class MGRSTools:
     def initGui(self):
         self.mapTool = MGRSMapTool(self.iface.mapCanvas())
 
-        self.toolAction = QAction("MGRS map tool",
+        mapToolIcon = QIcon(':/images/themes/default/transformed.png')
+        self.toolAction = QAction(mapToolIcon, "MGRS map tool",
                                      self.iface.mainWindow())        
         self.toolAction.triggered.connect(self.setTool)
         self.toolAction.setCheckable(True)
+        self.iface.addToolBarIcon(self.toolAction)
         self.iface.addPluginToMenu("MGRS", self.toolAction)
 
         zoomToIcon = QIcon(':/images/themes/default/mActionZoomIn.svg')
@@ -52,6 +54,7 @@ class MGRSTools:
 
     def unload(self):
         self.iface.mapCanvas().unsetMapTool(self.mapTool)
+        self.iface.removeToolBarIcon(self.toolAction)
         self.iface.removePluginMenu("MGRS", self.toolAction)
         self.iface.removePluginMenu("MGRS", self.zoomToAction)
    
