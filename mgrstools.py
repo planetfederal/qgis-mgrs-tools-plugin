@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import math
+import os
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 from qgis.core import *
@@ -16,7 +17,7 @@ class MGRSTools:
     def initGui(self):
         self.mapTool = MGRSMapTool(self.iface.mapCanvas())
 
-        mapToolIcon = QIcon(':/images/themes/default/transformed.png')
+        mapToolIcon = QIcon(os.path.join(os.path.dirname(__file__), "mgrs.svg"))
         self.toolAction = QAction(mapToolIcon, "MGRS map tool",
                                      self.iface.mainWindow())        
         self.toolAction.triggered.connect(self.setTool)
