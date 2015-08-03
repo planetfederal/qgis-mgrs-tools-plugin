@@ -12,7 +12,7 @@
 name=MGRS Tools
 qgisMinimumVersion=2.0
 description=MGRS Tools
-version=1.1
+version=1.2
 author=Boundless
 email=volaya@boundlessgeo.com
 
