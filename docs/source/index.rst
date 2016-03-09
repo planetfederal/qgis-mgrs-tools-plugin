@@ -1,3 +1,6 @@
+.. (c) 2016 Boundless, http://boundlessgeo.com
+   This code is licensed under the GPL 2.0 license.
+
 .. mgrs documentation master file, created by
    sphinx-quickstart on Thu Sep 18 08:13:01 2014.
    You can adapt this file completely to your liking, but it should at least

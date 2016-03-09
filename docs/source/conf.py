@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
 #
+# (c) 2016 Boundless, http://boundlessgeo.com
+# This code is licensed under the GPL 2.0 license.
+#
+#
 # mgrs documentation build configuration file, created by
 # sphinx-quickstart on Thu Sep 18 08:13:01 2014.
 #
