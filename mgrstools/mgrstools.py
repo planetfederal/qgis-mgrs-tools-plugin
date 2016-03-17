@@ -67,4 +67,5 @@ class MGRSTools:
         self.iface.removeToolBarIcon(self.toolAction)
         self.iface.removePluginMenu("MGRS", self.toolAction)
         self.iface.removePluginMenu("MGRS", self.zoomToAction)
-   
+        self.iface.removeDockWidget(self.zoomTo) 
+        self.zoomTo = None
