@@ -15,7 +15,7 @@ options(
         name = 'mgrstools',
         source_dir = path('mgrstools'),
         package_dir = path('.'),
-        tests = ['test'],
+        tests = ['test', 'tests'],
         excludes = [
             '*.pyc',
             '.git',
