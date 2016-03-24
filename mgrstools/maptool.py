@@ -3,7 +3,7 @@
 # (c) 2016 Boundless, http://boundlessgeo.com
 # This code is licensed under the GPL 2.0 license.
 #
-import mgrs
+
 from qgis.core import *
 from qgis.gui import *
 from qgis.utils import iface
@@ -12,6 +12,7 @@ from PyQt4.QtGui import *
 
 class MGRSMapTool(QgsMapTool):
      
+    import mgrs 
     ct = mgrs.MGRS()
     epsg4326 = QgsCoordinateReferenceSystem("EPSG:4326")
 

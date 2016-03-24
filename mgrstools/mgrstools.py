@@ -9,13 +9,21 @@ from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 from qgis.core import *
 from qgis.gui import *
-from maptool import MGRSMapTool
-from coorddialog import MGRSCoordInputDialog
+
+mgrsOk=True
+try:
+    import mgrs
+    from maptool import MGRSMapTool
+    from coorddialog import MGRSCoordInputDialog
+except ImportError:
+    raise
+    mgrsOk = False
+
 
 class MGRSTools:
 
     def __init__(self, iface):
-        self.iface = iface
+        self.iface = iface        
         try:
             from tests import testerplugin
             from qgistester.tests import addTestModule
@@ -24,7 +32,9 @@ class MGRSTools:
             pass        
 
     def initGui(self):
-        self.mapTool = MGRSMapTool(self.iface.mapCanvas())
+        if mgrsOk:
+            self.mapTool = MGRSMapTool(self.iface.mapCanvas())
+            self.iface.mapCanvas().mapToolSet.connect(self.unsetTool)
 
         mapToolIcon = QIcon(os.path.join(os.path.dirname(__file__), "mgrs.svg"))
         self.toolAction = QAction(mapToolIcon, "MGRS map tool",
@@ -40,14 +50,18 @@ class MGRSTools:
         self.zoomToAction.triggered.connect(self.zoomTo)
         self.iface.addPluginToMenu("MGRS", self.zoomToAction)
 
-        self.iface.mapCanvas().mapToolSet.connect(self.unsetTool)
-
-        self.zoomTo = MGRSCoordInputDialog(self.iface.mapCanvas(), self.iface.mainWindow())
-        self.iface.addDockWidget(Qt.TopDockWidgetArea, self.zoomTo)
-        self.zoomTo.hide()
+        if mgrsOk:
+            self.zoomToDialog = MGRSCoordInputDialog(self.iface.mapCanvas(), self.iface.mainWindow())
+            self.iface.addDockWidget(Qt.TopDockWidgetArea, self.zoomToDialog)
+            self.zoomToDialog.hide()
 
     def zoomTo(self):
-        self.zoomTo.show()
+        if mgrsOk:
+            self.zoomToDialog.show()
+        else:
+            QMessageBox.warning(self.iface.mainWindow(), "MRGS Tools", 
+                "Cannot load mgrs library.\nOnly OSX and Win32 systems supported.")
+
 
     def unsetTool(self, tool):
         try:
@@ -59,11 +73,16 @@ class MGRSTools:
 
 
     def setTool(self):
-        self.toolAction.setChecked(True)
-        self.iface.mapCanvas().setMapTool(self.mapTool)
+        if mgrsOk:
+            self.toolAction.setChecked(True)
+            self.iface.mapCanvas().setMapTool(self.mapTool)
+        else:
+            QMessageBox.warning(self.iface.mainWindow(), "MRGS Tools", 
+                "Cannot load mgrs library.\nOnly OSX and Win32 systems supported.")
 
     def unload(self):
-        self.iface.mapCanvas().unsetMapTool(self.mapTool)
+        if mgrsOk:
+            self.iface.mapCanvas().unsetMapTool(self.mapTool)
         self.iface.removeToolBarIcon(self.toolAction)
         self.iface.removePluginMenu("MGRS", self.toolAction)
         self.iface.removePluginMenu("MGRS", self.zoomToAction)

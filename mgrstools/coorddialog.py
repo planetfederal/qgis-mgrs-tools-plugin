@@ -3,13 +3,14 @@
 # (c) 2016 Boundless, http://boundlessgeo.com
 # This code is licensed under the GPL 2.0 license.
 #
-import mgrs
+
 from PyQt4 import QtGui, QtCore
 from qgis.core import *
 from qgis.gui import *
 from qgis.utils import *
 
 class MGRSCoordInputDialog(QtGui.QDockWidget):
+
     def __init__(self, canvas, parent):
         self.canvas = canvas
         self.marker = None
@@ -40,6 +41,7 @@ class MGRSCoordInputDialog(QtGui.QDockWidget):
 
     def zoomToPressed(self):
         try:
+            import mgrs
             mgrsCoord = str(self.coordBox.text()).replace(" ", "")
             lat, lon = mgrs.MGRS().toLatLon(mgrsCoord) 
             canvasCrs = self.canvas.mapRenderer().destinationCrs() 
@@ -55,7 +57,8 @@ class MGRSCoordInputDialog(QtGui.QDockWidget):
             self.marker.setPenWidth(4)
             self.removeMarkerButton.setDisabled(False)
             self.coordBox.setStyleSheet("QLineEdit{background: white}")
-        except Exception, e:    
+        except Exception, e:   
+            print e 
             self.coordBox.setStyleSheet("QLineEdit{background: yellow}")
 
     def removeMarker(self):
