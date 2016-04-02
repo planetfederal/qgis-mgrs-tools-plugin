@@ -8,9 +8,9 @@ import math
 class RTreeError(Exception):
     "RTree exception, indicates a RTree-related error."
     pass
-    
+
 if os.name == 'nt':
-    lib_name = 'libmgrs.dll'
+    lib_name = 'libmgrs_x{0}.dll'.format('64' if sys.maxsize > 2**32 else '86')
     try:
         lib_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), lib_name)
         print lib_path
@@ -52,7 +52,7 @@ def get_errors(value):
         if key & value:
             output += errors[key] + " & "
     return output[:-2]
-    
+
 def TO_RADIANS(degrees):
     return (float(degrees) * math.pi/180.0)
 
@@ -74,34 +74,71 @@ def check_error(result, func, cargs):
 #                                  char *MGRS);
 # /*
 #  * The function Convert_Geodetic_To_MGRS converts geodetic (latitude and
-#  * longitude) coordinates to an MGRS coordinate string, according to the 
-#  * current ellipsoid parameters.  If any errors occur, the error code(s) 
+#  * longitude) coordinates to an MGRS coordinate string, according to the
+#  * current ellipsoid parameters.  If any errors occur, the error code(s)
 #  * are returned by the  function, otherwise MGRS_NO_ERROR is returned.
 #  *
 #  *    Latitude   : Latitude in radians              (input)
 #  *    Longitude  : Longitude in radians             (input)
 #  *    Precision  : Precision level of MGRS string   (input)
 #  *    MGRS       : MGRS coordinate string           (output)
-#  *  
+#  *
 #  */
 
-rt.Convert_Geodetic_To_MGRS.argtypes = [ctypes.c_double, ctypes.c_double, ctypes.c_long, ctypes.c_char_p] 
+rt.Convert_Geodetic_To_MGRS.argtypes = [ctypes.c_double, ctypes.c_double, ctypes.c_long, ctypes.c_char_p]
 rt.Convert_Geodetic_To_MGRS.restype = ctypes.c_long
 rt.Convert_Geodetic_To_MGRS.errcheck = check_error
 
-# 
+#
 # /*
 #  * This function converts an MGRS coordinate string to Geodetic (latitude
-#  * and longitude in radians) coordinates.  If any errors occur, the error 
-#  * code(s) are returned by the  function, otherwise MGRS_NO_ERROR is returned.  
+#  * and longitude in radians) coordinates.  If any errors occur, the error
+#  * code(s) are returned by the  function, otherwise MGRS_NO_ERROR is returned.
 #  *
 #  *    MGRS       : MGRS coordinate string           (input)
 #  *    Latitude   : Latitude in radians              (output)
 #  *    Longitude  : Longitude in radians             (output)
-#  *  
+#  *
 #  */
-# 
+#
 
 rt.Convert_MGRS_To_Geodetic.argtypes = [ctypes.c_char_p, ctypes.POINTER(ctypes.c_double), ctypes.POINTER(ctypes.c_double)]
 rt.Convert_MGRS_To_Geodetic.restype = ctypes.c_long
 rt.Convert_MGRS_To_Geodetic.errcheck = check_error
+
+
+# /*
+#  * The function Convert_UTM_To_MGRS converts UTM (zone, easting, and
+#  * northing) coordinates to an MGRS coordinate string, according to the
+#  * current ellipsoid parameters.  If any errors occur, the error code(s)
+#  * are returned by the  function, otherwise MGRS_NO_ERROR is returned.
+#  *
+#  *    Zone       : UTM zone                         (input)
+#  *    Hemisphere : North or South hemisphere        (input)
+#  *    Easting    : Easting (X) in meters            (input)
+#  *    Northing   : Northing (Y) in meters           (input)
+#  *    Precision  : Precision level of MGRS string   (input)
+#  *    MGRS       : MGRS coordinate string           (output)
+#  */
+
+rt.Convert_UTM_To_MGRS.argtype = [ctypes.c_long, ctypes.c_char, ctypes.c_double, ctypes.c_double, ctypes.c_long, ctypes.c_char_p]
+rt.Convert_UTM_To_MGRS.restype = ctypes.c_long
+rt.Convert_UTM_To_MGRS.errcheck = check_error
+
+# /*
+#  * The function Convert_MGRS_To_UTM converts an MGRS coordinate string
+#  * to UTM projection (zone, hemisphere, easting and northing) coordinates
+#  * according to the current ellipsoid parameters.  If any errors occur,
+#  * the error code(s) are returned by the function, otherwise UTM_NO_ERROR
+#  * is returned.
+#  *
+#  *    MGRS       : MGRS coordinate string           (input)
+#  *    Zone       : UTM zone                         (output)
+#  *    Hemisphere : North or South hemisphere        (output)
+#  *    Easting    : Easting (X) in meters            (output)
+#  *    Northing   : Northing (Y) in meters           (output)
+#  */
+
+rt.Convert_MGRS_To_UTM.argtype = [ctypes.c_char_p, ctypes.POINTER(ctypes.c_long), ctypes.POINTER(ctypes.c_char), ctypes.POINTER(ctypes.c_double), ctypes.POINTER(ctypes.c_double)]
+rt.Convert_MGRS_To_UTM.restype = ctypes.c_long
+rt.Convert_MGRS_To_UTM.errcheck = check_error
