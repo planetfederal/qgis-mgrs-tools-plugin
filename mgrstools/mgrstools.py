@@ -83,8 +83,9 @@ class MGRSTools:
     def unload(self):
         if mgrsOk:
             self.iface.mapCanvas().unsetMapTool(self.mapTool)
+            self.iface.removeDockWidget(self.zoomToDialog) 
+            self.zoomToDialog = None
         self.iface.removeToolBarIcon(self.toolAction)
         self.iface.removePluginMenu("MGRS", self.toolAction)
         self.iface.removePluginMenu("MGRS", self.zoomToAction)
-        self.iface.removeDockWidget(self.zoomTo) 
-        self.zoomTo = None
+        
