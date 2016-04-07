@@ -18,7 +18,7 @@ name=MGRS Tools
 qgisMinimumVersion=2.0
 description=MGRS coordinates tools
 about=Tools to query and zoom to MGRS coordinates in QGIS
-version=1.2
+version=1.3
 author=Victor Olaya (Boundless)
 email=volaya@boundlessgeo.com
 
