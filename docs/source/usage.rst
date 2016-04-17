@@ -37,6 +37,8 @@ The *Zoom to MGRS coordinate* tool is accessed trough the :guilabel:`MGRS Coordi
 
 Insert the desired MGRS coordinate in the :guilabel:`MGRS coordinate` field (The coordinates can be inserted at any level of precision, from 100 km to 1 m), and press the :guilabel:`Zoom to` button. The map canvas will be centered and zoomed to the corresponding MGRS grid square, and a marker will be added to the corresponding position.
 
-.. image:: img/zoomto.png
+.. figure:: img/zoomto.png
+
+   Map Canvas centered on inserted MGRS coordinate
 
 To remove the marker, click the :guilabel:`Remove marker button` in the :guilabel:`MGRS Coordinate Zoom panel`
