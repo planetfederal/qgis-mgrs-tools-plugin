@@ -8,7 +8,7 @@ The easiest way to install |current_plugin| is to use the **Boundless Connect Pl
 
 .. note:: 
    
-   If you are using |BLQGIS|, the *Boundless Connect plugin* should be installed by defautt. Otherwise, if you are using QGIS from one of the community's installers, you can install the *Boundless Connect plugin* by setting up the `Boundless QGIS Plugin Repository`_ in the QGIS plugin manager.
+   If you are using |BLQGIS|, the *Boundless Connect plugin* should be installed by default. Otherwise, if you are using QGIS from one of the community's installers, you can install the *Boundless Connect plugin* by setting up the `Boundless QGIS Plugin Repository`_ in the QGIS plugin manager.
 
 Install from repository
 -----------------------
