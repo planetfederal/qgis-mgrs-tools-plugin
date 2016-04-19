@@ -6,14 +6,16 @@ Usage
 
 The *MGRS tools plugin* contains two tools:
 
-* MGRS map tool
-* Zoom to MGRS coordinate
+* :ref:`mgrs-map-tool`
+* :ref:`zoom-to-mgrs`
 
 .. note::
 
    The Military Grid Reference System (MGRS) was created as a geocoordinate standard used by NATO militaries for locating points on the earth. MGRS coordinates are given as single string composed of a pattern of letters and numbers and represent a grid square. The coordinates can be given with different precision levels, representing squares with different side sizes (100Km, 10km, 1km, 100m, 10m, 1m).
 
    For more information about the MGRS system use the following the `link <https://en.wikipedia.org/wiki/Military_grid_reference_system)>`_.
+
+.. _mgrs-map-tool:
 
 MGRS Map Tool
 -------------
@@ -27,6 +29,8 @@ The *MGRS map tool* will get activated. Now, when you move your mouse cursor ove
    QGIS status bar showing the coordinate of the mouse cursor position.
    
 Besides, with the *MGRS map tool* activated, the user can also click anywhere in the map canvas to get the MGRS coordinate (at 1m precision) copied to the clipboard.
+
+.. _zoom-to-mgrs:
    
 Zoom to MGRS coordinate
 -----------------------
