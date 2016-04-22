@@ -47,7 +47,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'mgrs'
+project = u'MGRS Tools'
 copyright = u'2014, volaya'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -181,6 +181,12 @@ html_static_path = ['_static']
 
 # Output file base name for HTML help builder.
 htmlhelp_basename = 'mgrsdoc'
+
+# Substitutions
+rst_epilog = """
+.. |BLQGIS| replace:: *Bouldless Desktop*
+.. |current_plugin| replace:: *MGRS Tools Plugin*
+"""
 
 
 # -- Options for LaTeX output ---------------------------------------------

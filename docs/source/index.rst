@@ -6,14 +6,17 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to mgrs's documentation!
-================================
+MGRS Tools Documentation
+========================
 
-Contents:
+The MGRS Tools is a QGIS plugin that enables the users to work with the Military Grid Reference System (MGRS) coordinates in QGIS.
+
+Content:
 
 .. toctree::
    :maxdepth: 2
 
+   installation
    usage
 
 Indices and tables
