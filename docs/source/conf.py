@@ -184,7 +184,7 @@ htmlhelp_basename = 'mgrsdoc'
 
 # Substitutions
 rst_epilog = """
-.. |BLQGIS| replace:: *QGIS for OpenGeo Suite*
+.. |BLQGIS| replace:: *Bouldless Desktop*
 .. |current_plugin| replace:: *MGRS Tools Plugin*
 """
 
