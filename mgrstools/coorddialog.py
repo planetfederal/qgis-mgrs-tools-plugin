@@ -23,7 +23,7 @@ class MGRSCoordInputDialog(QtGui.QDockWidget):
         self.label = QtGui.QLabel('MGRS coordinate')        
         self.coordBox = QtGui.QLineEdit()      
         self.coordBox.returnPressed.connect(self.zoomToPressed)  
-        self.zoomToButton = QtGui.QPushButton("Zoom to")
+        self.zoomToButton = QtGui.QPushButton("Move to")
         self.zoomToButton.clicked.connect(self.zoomToPressed)
         self.removeMarkerButton = QtGui.QPushButton("Remove marker")
         self.removeMarkerButton.clicked.connect(self.removeMarker)
