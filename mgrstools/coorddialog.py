@@ -20,9 +20,9 @@ class MGRSCoordInputDialog(QtGui.QDockWidget):
 
     def initGui(self):
         self.setWindowTitle("MGRS Coordinate Zoom")
-        self.label = QtGui.QLabel('MGRS coordinate')        
-        self.coordBox = QtGui.QLineEdit()      
-        self.coordBox.returnPressed.connect(self.zoomToPressed)  
+        self.label = QtGui.QLabel('MGRS coordinate')
+        self.coordBox = QtGui.QLineEdit()
+        self.coordBox.returnPressed.connect(self.zoomToPressed)
         self.zoomToButton = QtGui.QPushButton("Move to")
         self.zoomToButton.clicked.connect(self.zoomToPressed)
         self.removeMarkerButton = QtGui.QPushButton("Remove marker")
@@ -43,11 +43,11 @@ class MGRSCoordInputDialog(QtGui.QDockWidget):
         try:
             import mgrs
             mgrsCoord = str(self.coordBox.text()).replace(" ", "")
-            lat, lon = mgrs.MGRS().toLatLon(mgrsCoord) 
-            canvasCrs = self.canvas.mapRenderer().destinationCrs() 
+            lat, lon = mgrs.MGRS().toLatLon(mgrsCoord)
+            canvasCrs = self.canvas.mapSettings().destinationCrs()
             epsg4326 = QgsCoordinateReferenceSystem("EPSG:4326")
             transform4326 = QgsCoordinateTransform(epsg4326, canvasCrs)
-            center = transform4326.transform(lon, lat)             
+            center = transform4326.transform(lon, lat)
             self.canvas.zoomByFactor(1, center)
             self.canvas.refresh()
             if self.marker is None:
@@ -57,8 +57,8 @@ class MGRSCoordInputDialog(QtGui.QDockWidget):
             self.marker.setPenWidth(4)
             self.removeMarkerButton.setDisabled(False)
             self.coordBox.setStyleSheet("QLineEdit{background: white}")
-        except Exception, e:   
-            print e 
+        except Exception, e:
+            print e
             self.coordBox.setStyleSheet("QLineEdit{background: yellow}")
 
     def removeMarker(self):
