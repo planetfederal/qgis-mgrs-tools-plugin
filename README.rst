@@ -44,3 +44,14 @@ and forth will render the same initial coordinate, as shown in this example:
   coordinate of '15TWG0000049776' (using the full precision in this case)
 * Converting that into latitude/longitude again, it returns
   41.999997975127997, -93.000000000000014
+
+Cloning this repository
+=======================
+
+This repository uses external repositories as submodules. Therefore in order to include the external repositories during cloning you should use the *--recursive* option:
+
+git clone --recursive http://github.com/boundlessgeo/qgis-mgrs-tools-plugin.git
+
+Also, to update the submodules whenever there are changes in the remote repositories one should do:
+
+git submodule update --remote
