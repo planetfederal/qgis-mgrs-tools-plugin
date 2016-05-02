@@ -11,18 +11,11 @@ MGRS Tools Documentation
 
 The MGRS Tools is a QGIS plugin that enables the users to work with the Military Grid Reference System (MGRS) coordinates in QGIS.
 
-Content:
+Documentation content:
 
 .. toctree::
    :maxdepth: 2
 
    installation
    usage
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
 
