@@ -1,3 +1,6 @@
+.. image:: https://travis-ci.org/boundlessgeo/qgis-mgrs-tools-plugin.svg?branch=master
+    :target: https://travis-ci.org/boundlessgeo/qgis-mgrs-tools-plugin
+
 MGRS Tools
 ==========
 
