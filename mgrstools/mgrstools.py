@@ -23,13 +23,13 @@ except ImportError:
 class MGRSTools:
 
     def __init__(self, iface):
-        self.iface = iface        
+        self.iface = iface
         try:
             from tests import testerplugin
             from qgistester.tests import addTestModule
             addTestModule(testerplugin, "MGRS tools")
         except:
-            pass        
+            pass
 
     def initGui(self):
         if mgrsOk:
@@ -38,7 +38,7 @@ class MGRSTools:
 
         mapToolIcon = QIcon(os.path.join(os.path.dirname(__file__), "mgrs.svg"))
         self.toolAction = QAction(mapToolIcon, "MGRS map tool",
-                                     self.iface.mainWindow())        
+                                     self.iface.mainWindow())
         self.toolAction.triggered.connect(self.setTool)
         self.toolAction.setCheckable(True)
         self.iface.addToolBarIcon(self.toolAction)
@@ -46,7 +46,7 @@ class MGRSTools:
 
         zoomToIcon = QIcon(':/images/themes/default/mActionZoomIn.svg')
         self.zoomToAction = QAction(zoomToIcon, "Zoom to MGRS coordinate",
-                                     self.iface.mainWindow())        
+                                     self.iface.mainWindow())
         self.zoomToAction.triggered.connect(self.zoomTo)
         self.iface.addPluginToMenu("MGRS", self.zoomToAction)
 
@@ -59,7 +59,7 @@ class MGRSTools:
         if mgrsOk:
             self.zoomToDialog.show()
         else:
-            QMessageBox.warning(self.iface.mainWindow(), "MRGS Tools", 
+            QMessageBox.warning(self.iface.mainWindow(), "MRGS Tools",
                 "Cannot load mgrs library.\nOnly OSX and Win32 systems supported.")
 
 
@@ -77,15 +77,21 @@ class MGRSTools:
             self.toolAction.setChecked(True)
             self.iface.mapCanvas().setMapTool(self.mapTool)
         else:
-            QMessageBox.warning(self.iface.mainWindow(), "MRGS Tools", 
+            QMessageBox.warning(self.iface.mainWindow(), "MRGS Tools",
                 "Cannot load mgrs library.\nOnly OSX and Win32 systems supported.")
 
     def unload(self):
         if mgrsOk:
             self.iface.mapCanvas().unsetMapTool(self.mapTool)
-            self.iface.removeDockWidget(self.zoomToDialog) 
+            self.iface.removeDockWidget(self.zoomToDialog)
             self.zoomToDialog = None
         self.iface.removeToolBarIcon(self.toolAction)
         self.iface.removePluginMenu("MGRS", self.toolAction)
         self.iface.removePluginMenu("MGRS", self.zoomToAction)
-        
+
+        try:
+            from tests import testerplugin
+            from qgistester.tests import removeTestModule
+            removeTestModule(testerplugin, "MGRS tools")
+        except:
+            pass
