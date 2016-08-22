@@ -6,6 +6,7 @@
 import os
 import xmlrpclib
 import zipfile
+import shutil
 
 from paver.easy import *
 
@@ -14,12 +15,15 @@ options(
     plugin = Bunch(
         name = 'mgrstools',
         source_dir = path('mgrstools'),
+        ext_libs = path('mgrstools/ext-libs'),
+        ext_src = path('mgrstools/ext-src'),
         package_dir = path('.'),
         tests = ['test', 'tests'],
         excludes = [
             '*.pyc',
             '.git',
-            '*.pro'
+            '*.pro',
+            'ext-src'
         ],
         # skip certain files inadvertently found by exclude pattern globbing
         skip_exclude = []
@@ -35,9 +39,48 @@ options(
 
 
 @task
-def setup():
-    """Empty: to ensure we use the same build/install procedure for all our plugins"""
-    pass
+@cmdopts([
+    ('clean', 'c', 'Clean out dependencies first'),
+])
+def setup(options):
+    """Install run-time dependencies"""
+    clean = getattr(options, 'clean', False)
+    develop = getattr(options, 'develop', False)
+    ext_libs = options.plugin.ext_libs
+    ext_src = options.plugin.ext_src
+    if clean:
+        ext_libs.rmtree()
+    ext_libs.makedirs()
+
+    mgrsPath = ext_src / 'mgrspy'
+    cwd = os.getcwd()
+    if os.path.exists(mgrsPath):
+        os.chdir(mgrsPath)
+        sh("git checkout master")
+        sh("git pull")
+    else:
+        sh("git clone git@github.com:boundlessgeo/mgrspy.git %s" % mgrsPath)
+    os.chdir(cwd)
+    dst = ext_libs / 'mgrspy'
+    if os.path.exists(dst):
+        shutil.rmtree(dst)
+    shutil.copytree(os.path.join(mgrsPath, 'mgrspy'), dst)
+
+
+def read_requirements():
+    """Return a list of runtime and list of test requirements"""
+    lines = path('requirements.txt').lines()
+    lines = [ l for l in [ l.strip() for l in lines] if l ]
+    divider = '# test requirements'
+
+    try:
+        idx = lines.index(divider)
+    except ValueError:
+        raise BuildFailure(
+            'Expected to find "%s" in requirements.txt' % divider)
+
+    not_comments = lambda s,e: [ l for l in lines[s:e] if l[0] != '#']
+    return not_comments(0, idx), not_comments(idx+1, None)
 
 
 @task
