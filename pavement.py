@@ -59,7 +59,7 @@ def setup(options):
         sh("git checkout master")
         sh("git pull")
     else:
-        sh("git clone git@github.com:boundlessgeo/mgrspy.git %s" % mgrsPath)
+        sh("git clone https://github.com/boundlessgeo/mgrspy.git %s" % mgrsPath)
     os.chdir(cwd)
     dst = ext_libs / 'mgrspy'
     if os.path.exists(dst):
