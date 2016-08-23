@@ -12,6 +12,14 @@ from PyQt4.QtGui import QIcon, QAction
 from mgrstools.maptool import MGRSMapTool
 from mgrstools.gui.mgrsdock import MgrsDockWidget
 
+try:
+    from processing.core.Processing import Processing
+    from mgrstools.processingprovider.mgrsprovider import MgrsProvider
+    processingOk = True
+except:
+    raise
+    processingOk = False
+
 pluginPath = os.path.dirname(__file__)
 
 
@@ -25,6 +33,10 @@ class MGRSToolsPlugin:
             addTestModule(testerplugin, 'MGRS tools')
         except:
             pass
+
+        if processingOk:
+            self.provider = MgrsProvider()
+
 
     def initGui(self):
         self.mapTool = MGRSMapTool(self.iface.mapCanvas())
@@ -49,6 +61,9 @@ class MGRSToolsPlugin:
         self.iface.addDockWidget(Qt.TopDockWidgetArea, self.mgrsDock)
         self.mgrsDock.hide()
 
+        if processingOk:
+            Processing.addProvider(self.provider)
+
     def zoomTo(self):
         self.mgrsDock.show()
 
@@ -72,6 +87,9 @@ class MGRSToolsPlugin:
         self.iface.removeToolBarIcon(self.toolAction)
         self.iface.removePluginMenu(self.tr('MGRS'), self.toolAction)
         self.iface.removePluginMenu(self.tr('MGRS'), self.zoomToAction)
+
+        if processingOk:
+            Processing.removeProvider(self.provider)
 
         try:
             from tests import testerplugin
