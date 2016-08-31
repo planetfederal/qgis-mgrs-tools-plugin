@@ -1,44 +1,21 @@
-#
-# (c) 2016 Boundless, http://boundlessgeo.com
-# This code is licensed under the GPL 2.0 license.
-#
-
-# This file contains metadata for your plugin. Beginning
-# with version 1.8 this is the preferred way to supply information about a
-# plugin. The current method of embedding metadata in __init__.py will
-# be supported until version 2.0
-
-# This file should be included when you package your plugin.
-
-# Mandatory items:
-
-
 [general]
 name=MGRS Tools
-qgisMinimumVersion=2.0
 description=MGRS coordinates tools
 about=Tools to query and zoom to MGRS coordinates in QGIS
 version=1.3
+qgisMinimumVersion=2.0
+
 author=Victor Olaya (Boundless)
 email=volaya@boundlessgeo.com
 
-# end of mandatory metadata
+icon=mgrs.svg
 
-# Optional items:
-
-# Uncomment the following line and add your changelog entries:
-changelog=
-
-# tags are comma separated with spaces allowed
 tags=plugins,boundless
 
-homepage=https://github.com/boundlessgeo/qgis-mgrs-tools-plugin
+homepage=https://connect.boundlessgeo.com/docs/desktop/plugins/mgrstools/
 tracker=https://github.com/boundlessgeo/qgis-mgrs-tools-plugin/issues
 repository=https://github.com/boundlessgeo/qgis-mgrs-tools-plugin
-icon=mgrs.svg
-# experimental flag
-experimental=False
 
-# deprecated flag (applies to the whole plugin, not just a single version
+experimental=False
 deprecated=False
 
