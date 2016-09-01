@@ -43,13 +43,14 @@ class AddMgrsField(GeoAlgorithm):
     def processAlgorithm(self, progress):
         filename = self.getParameterValue(self.INPUT)
         layer = dataobjects.getObjectFromUri(filename)
-        provider = layer.dataprovider()
+        provider = layer.dataProvider()
 
         caps = provider.capabilities()
         if not (caps & QgsVectorDataProvider.AddAttributes):
             raise GeoAlgorithmExecutionException('The selected layer does not '
                                                 ' support adding new attributes.')
 
+        fields = layer.fields()
         idxField = fields.indexFromName('MGRS')
         if idxField == -1:
             provider.addAttributes([QgsField('MGRS', QVariant.String)])
