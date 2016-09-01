@@ -10,8 +10,10 @@ from PyQt4 import uic
 from PyQt4.QtCore import Qt
 from PyQt4.QtGui import QDockWidget, QIcon
 
-from qgis.core import QgsCoordinateReferenceSystem
+from qgis.core import QgsCoordinateReferenceSystem, QgsCoordinateTransform
 from qgis.gui import QgsVertexMarker
+
+from mgrspy import mgrs
 
 pluginPath = os.path.split(os.path.dirname(__file__))[0]
 WIDGET, BASE = uic.loadUiType(
@@ -41,7 +43,7 @@ class MgrsDockWidget(BASE, WIDGET):
         mgrsCoord = unicode(self.leMgrsCoordinate.text()).strip()
         lat, lon = mgrs.toWgs(mgrsCoord)
         canvasCrs = self.canvas.mapSettings().destinationCrs()
-        transform4326 = QgsCoordinateTransform(epsg4326, canvasCrs)
+        transform4326 = QgsCoordinateTransform(self.epsg4326, canvasCrs)
         center = transform4326.transform(lon, lat)
         self.canvas.zoomByFactor(1, center)
         self.canvas.refresh()
@@ -50,7 +52,7 @@ class MgrsDockWidget(BASE, WIDGET):
         self.marker.setCenter(center)
         self.marker.setIconSize(8)
         self.marker.setPenWidth(4)
-        self.removeMarkerButton.setDisabled(False)
+        self.btnRemoveMarker.setDisabled(False)
 
     def removeMarker(self):
         self.canvas.scene().removeItem(self.marker)
