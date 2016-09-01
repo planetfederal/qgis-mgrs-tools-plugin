@@ -42,7 +42,7 @@ class MGRSToolsPlugin:
         self.mapTool = MGRSMapTool(self.iface.mapCanvas())
         self.iface.mapCanvas().mapToolSet.connect(self.unsetTool)
 
-        self.toolAction = QAction(QIcon(os.path.join(pluginPath, 'mgrs.svg')),
+        self.toolAction = QAction(QIcon(os.path.join(pluginPath, 'icons', 'mgrs.svg')),
                                   self.tr('MGRS map tool'),
                                   self.iface.mainWindow())
         self.toolAction.setCheckable(True)
