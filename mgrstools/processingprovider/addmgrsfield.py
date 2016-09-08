@@ -27,7 +27,7 @@ class AddMgrsField(GeoAlgorithm):
     OUTPUT = 'OUTPUT'
 
     def getIcon(self):
-        return QIcon(os.path.join(pluginPath, 'mgrs.svg'))
+        return QIcon(os.path.join(pluginPath, 'icons', 'mgrs.svg'))
 
     def defineCharacteristics(self):
         self.name = 'Add MGRS field to points layer'

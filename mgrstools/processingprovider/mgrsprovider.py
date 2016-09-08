@@ -38,7 +38,7 @@ class MgrsProvider(AlgorithmProvider):
         return 'MGRS tools'
 
     def getIcon(self):
-        return QIcon(os.path.join(pluginPath, 'mgrs.svg'))
+        return QIcon(os.path.join(pluginPath, 'icons', 'mgrs.svg'))
 
     def _loadAlgorithms(self):
         self.algs = self.alglist
