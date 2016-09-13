@@ -1,7 +1,7 @@
 [general]
 name=MGRS Tools
 description=Work with Military Grid Reference System (MGRS) coordinates in QGIS
-about=<p>The Military Grid Reference System (MGRS) was created as a geocoordinate standard used by NATO militaries for locating points on the earth. MGRS coordinates are a single string composed of a pattern of letters and numbers representing a grid square.</p><p>The MGRS Map Tool displays MGRS coordinates in the QGIS status bar (bottom left) as you pan and zoom around the map. The Zoom to MGRS coordinate tool allow you to zoom the map canvas to a given MGRS coordinate.</p>
+about=<p>The Military Grid Reference System (MGRS) was created as a geocoordinate standard used by NATO militaries for locating points on the earth. MGRS coordinates are a single string composed of a pattern of letters and numbers representing a grid square.</p><p>The MGRS Map Tool displays MGRS coordinates in the QGIS status bar (bottom left) as you pan and zoom around the map. The Zoom to MGRS coordinate tool allow you to zoom the map canvas to a given MGRS coordinate.</p><p>This plugin is available for all registered Boundless Desktop users.</p>
 category=Plugins
 version=1.3
 qgisMinimumVersion=2.0
