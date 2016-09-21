@@ -1,32 +1,48 @@
 sudo: required
 addons:
   hosts:
-    - boundless-test
+  - boundless-test
 services:
-    - docker
+- docker
 env:
   global:
-    - PLUGIN_NAME=mgrstools
+  - PLUGIN_NAME=mgrstools
+  - secure: ysTjTiPxAlXFnyYHv43XQGOvK4EyAxzxEe3XBmMfMrvK+DGmL1e7No1w4jQ4enXWWi/nwr5kYuQlSDSPOnO/5CwZxx11H+Qe9aRcg2qKegXNiWrSWrVAkfa+xvq8NVUO0VzNn3ZZ8YIJu/Su7DxHV9f5WGi4dvZvjI/fxJp3dDg=
+  - secure: WSjmuT8OKyXd2QJIaffDmxYDQwqIipiRTyD3xX1s4J/sHnLILXwrwNNSoG6Q9AFgblbmgsKTRfkbkf2uk0KQIX0A8nbMHaG54WuMAdhJ7IRcwZwBRV7FHlAOEjAgyRYstknAN8l90QAJuXNyyBUBge3WWKcAiOKZrzFeTzf7l3s=
   matrix:
-    - QGIS_VERSION_TAG=master
-    - QGIS_VERSION_TAG=release
+  - QGIS_VERSION_TAG=release
+  - QGIS_VERSION_TAG=master_2
+  - QGIS_VERSION_TAG=master
+matrix:
+  allow_failures:
+  - env: QGIS_VERSION_TAG=master
 before_install:
-    - docker pull elpaso/qgis-testing-environment:${QGIS_VERSION_TAG}
-    - docker tag elpaso/qgis-testing-environment:${QGIS_VERSION_TAG} qgis-testing-environment
+- docker pull elpaso/qgis-testing-environment:${QGIS_VERSION_TAG}
+- docker tag elpaso/qgis-testing-environment:${QGIS_VERSION_TAG} qgis-testing-environment
 install:
-    - docker run -d --name qgis-testing-environment -v ${TRAVIS_BUILD_DIR}:/tests_directory -e DISPLAY=:99 qgis-testing-environment
-    - sleep 10
-
-    # Setup QGIS to avoid modals and install test auth db
-    - docker exec -it qgis-testing-environment sh -c "qgis_setup.sh ${PLUGIN_NAME}"
-
-    # Build the plugin
-    - docker exec -it qgis-testing-environment sh -c "pip install paver"
-    - docker exec -it qgis-testing-environment sh -c "cd /tests_directory && paver setup"
-    - docker exec -it qgis-testing-environment sh -c "ln -s /tests_directory/${PLUGIN_NAME} /root/.qgis2/python/plugins/${PLUGIN_NAME}"
-
+- docker run -d --name qgis-testing-environment -v ${TRAVIS_BUILD_DIR}:/tests_directory -e DISPLAY=:99 qgis-testing-environment
+- sleep 10
+- docker exec -it qgis-testing-environment sh -c "qgis_setup.sh ${PLUGIN_NAME}"
+- docker exec -it qgis-testing-environment sh -c "pip install paver"
+- docker exec -it qgis-testing-environment sh -c "cd /tests_directory && paver setup"
+- docker exec -it qgis-testing-environment sh -c "ln -s /tests_directory/${PLUGIN_NAME} /root/.qgis2/python/plugins/${PLUGIN_NAME}"
 script:
-    # Run the unit tests
-    # This plugin has not yet any unit tests
-    - docker exec -it qgis-testing-environment sh -c "echo '${PLUGIN_NAME} has no unit tests yet, please create them and add here'"
-
+- docker exec -it qgis-testing-environment sh -c "echo '${PLUGIN_NAME} has no unit tests yet, please create them and add here'"
+notifications:
+  slack:
+    secure: ui1aBjelCtu9stZwoKunOV5pQ01Won63AN4fOvG1Z00duX52H4vDbPJqLWTpOFkhmDpEiDO78k0au2F9a6UeuhC5tJ/k8/5JgMkDXakaueGb5TgaWTb4DctOXAexUe8OyZ7Vw9wyy/Ek7o9nYs0WznwTnDZ+o7IxjH8Th/DDK9o=
+after_success:
+- mkdir /home/travis/.ssh/
+- chmod 700 /home/travis/.ssh/
+- openssl aes-256-cbc -K $encrypted_5fbe6ce81355_key -iv $encrypted_5fbe6ce81355_iv -in travis_secrets.tar.gz.enc -out travis_secrets.tar.gz -d
+- tar xzvf travis_secrets.tar.gz
+- mv id_rsa.qgisrepoguest /home/travis/.ssh/id_rsa.qgisrepoguest
+- mv ssh_config /home/travis/.ssh/config
+- chmod 600 /home/travis/.ssh/id_rsa.qgisrepoguest
+- chmod 600 /home/travis/.ssh/config
+- docker exec qgis-testing-environment sh -c "cd /tests_directory && paver package --test"
+- export RELEASE_ZIPNAME=${PLUGIN_NAME}.zip
+- echo "Uploading ${RELEASE_ZIPNAME} to QGIS Dev..."
+- scp ${PLUGIN_NAME}.zip qgisrepoguest:${UPLOADS}/${RELEASE_ZIPNAME}
+- export GIT_REV=$(git rev-parse --short HEAD)
+- ssh qgisrepoguest "${UPDATER} update --dev --role DesktopPartner,DesktopDeveloper --git-hash ${GIT_REV} ${RELEASE_ZIPNAME}"

@@ -35,5 +35,5 @@ def functionalTests():
 
 def unitTests():
     _tests = []
-    #add unit tests with _tests.extend(test_suite)    
+    #add unit tests with _tests.extend(test_suite)
     return _tests
