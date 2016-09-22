@@ -8,7 +8,6 @@ def functionalTests():
     try:
         from qgistester.test import Test
         from qgistester.utils import loadLayer
-        import mgrs
     except:
         return []
 
