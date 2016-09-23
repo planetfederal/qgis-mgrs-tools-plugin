@@ -117,6 +117,7 @@ def install_devtools():
 def package(options):
     """Create plugin package
     """
+    builddocs(options)
     package_file = options.plugin.package_dir / ('%s.zip' % options.plugin.name)
     with zipfile.ZipFile(package_file, 'w', zipfile.ZIP_DEFLATED) as zf:
         if not hasattr(options.package, 'tests'):
@@ -220,7 +221,7 @@ def _make_zip(zipFile, options):
         for f in files:
             relpath = os.path.join(options.plugin.name, "docs", os.path.relpath(root, options.sphinx.builddir))
             zipFile.write(path(root) / f, path(relpath) / f)
-            
+
 @task
 def builddocs(options):
     sh("git submodule init")
