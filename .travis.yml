@@ -32,16 +32,19 @@ notifications:
   slack:
     secure: ui1aBjelCtu9stZwoKunOV5pQ01Won63AN4fOvG1Z00duX52H4vDbPJqLWTpOFkhmDpEiDO78k0au2F9a6UeuhC5tJ/k8/5JgMkDXakaueGb5TgaWTb4DctOXAexUe8OyZ7Vw9wyy/Ek7o9nYs0WznwTnDZ+o7IxjH8Th/DDK9o=
 after_success:
-- mkdir /home/travis/.ssh/
-- chmod 700 /home/travis/.ssh/
-- openssl aes-256-cbc -K $encrypted_5fbe6ce81355_key -iv $encrypted_5fbe6ce81355_iv -in travis_secrets.tar.gz.enc -out travis_secrets.tar.gz -d
-- tar xzvf travis_secrets.tar.gz
-- mv id_rsa.qgisrepoguest /home/travis/.ssh/id_rsa.qgisrepoguest
-- mv ssh_config /home/travis/.ssh/config
-- chmod 600 /home/travis/.ssh/id_rsa.qgisrepoguest
-- chmod 600 /home/travis/.ssh/config
-- export RELEASE_ZIPNAME=${PLUGIN_NAME}.zip
-- echo "Uploading ${RELEASE_ZIPNAME} to QGIS Dev..."
-- scp ${PLUGIN_NAME}.zip qgisrepoguest:${UPLOADS}/${RELEASE_ZIPNAME}
-- export GIT_REV=$(git rev-parse --short HEAD)
-- ssh qgisrepoguest "${UPDATER} update --dev --role DesktopPartner,DesktopDeveloper --git-hash ${GIT_REV} ${RELEASE_ZIPNAME}"
+- |
+    if [ "${TRAVIS_PULL_REQUEST}" = "false" ] && [ "${TRAVIS_BRANCH}" = "master" ]; then
+        mkdir /home/travis/.ssh/
+        chmod 700 /home/travis/.ssh/
+        openssl aes-256-cbc -K $encrypted_5fbe6ce81355_key -iv $encrypted_5fbe6ce81355_iv -in travis_secrets.tar.gz.enc -out travis_secrets.tar.gz -d
+        tar xzvf travis_secrets.tar.gz
+        mv id_rsa.qgisrepoguest /home/travis/.ssh/id_rsa.qgisrepoguest
+        mv ssh_config /home/travis/.ssh/config
+        chmod 600 /home/travis/.ssh/id_rsa.qgisrepoguest
+        chmod 600 /home/travis/.ssh/config
+        export RELEASE_ZIPNAME=${PLUGIN_NAME}.zip
+        echo "Uploading ${RELEASE_ZIPNAME} to QGIS Dev..."
+        scp ${PLUGIN_NAME}.zip qgisrepoguest:${UPLOADS}/${RELEASE_ZIPNAME}
+        export GIT_REV=$(git rev-parse --short HEAD)
+        ssh qgisrepoguest "${UPDATER} update --dev --role DesktopPartner,DesktopDeveloper --git-hash ${GIT_REV} ${RELEASE_ZIPNAME}"
+    fi
