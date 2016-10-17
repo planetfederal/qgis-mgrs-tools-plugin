@@ -117,7 +117,7 @@ html_theme_path = ['../themes']
 #html_title = None
 
 # A shorter title for the navigation bar.  Default is the same as html_title.
-#html_short_title = None
+html_short_title = project
 
 # The name of an image file (relative to this directory) to place at the top
 # of the sidebar.
@@ -185,7 +185,7 @@ htmlhelp_basename = 'mgrsdoc'
 # Substitutions
 rst_epilog = """
 .. |BLQGIS| replace:: *Bouldless Desktop*
-.. |current_plugin| replace:: *MGRS Tools Plugin*
+.. |current_plugin| replace:: *MGRS Tools*
 """
 
 
@@ -206,7 +206,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-  ('index', 'mgrs.tex', u'mgrs Documentation',
+  ('index', 'mgrs.tex', u'MGRS Tools Documentation',
    u'volaya', 'manual'),
 ]
 
@@ -236,7 +236,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    ('index', 'mgrs', u'mgrs Documentation',
+    ('index', 'mgrs', u'MGRS Tools Documentation',
      [u'volaya'], 1)
 ]
 
@@ -250,7 +250,7 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-  ('index', 'mgrs', u'mgrs Documentation',
+  ('index', 'mgrs', u'MGRS Tools Documentation',
    u'volaya', 'mgrs', 'One line description of project.',
    'Miscellaneous'),
 ]
