@@ -6,8 +6,10 @@
 
 import os
 
-from PyQt4.QtCore import Qt, QCoreApplication
-from PyQt4.QtGui import QIcon, QAction
+from PyQt4.QtCore import Qt, QCoreApplication, QUrl
+from PyQt4.QtGui import QIcon, QAction, QDesktopServices, QMessageBox
+
+from qgis.core import QgsApplication
 
 from mgrstools.maptool import MGRSMapTool
 from mgrstools.gui.mgrsdock import MgrsDockWidget
@@ -57,6 +59,16 @@ class MGRSToolsPlugin:
         self.iface.addPluginToMenu(self.tr('MGRS'), self.zoomToAction)
         self.zoomToAction.triggered.connect(self.zoomTo)
 
+        self.actionHelp = QAction(
+            QgsApplication.getThemeIcon('/mActionHelpContents.svg'),
+            self.tr('Help'),
+            self.iface.mainWindow())
+        self.actionHelp.setWhatsThis(
+            self.tr('MGRS Tools documentation'))
+        self.actionHelp.setObjectName('actionMGRSHelp')
+        self.iface.addPluginToMenu(self.tr('MGRS'), self.actionHelp)
+        self.actionHelp.triggered.connect(self.showHelp)
+
         self.mgrsDock = MgrsDockWidget(self.iface.mapCanvas(), self.iface.mainWindow())
         self.iface.addDockWidget(Qt.TopDockWidgetArea, self.mgrsDock)
         self.mgrsDock.hide()
@@ -79,6 +91,13 @@ class MGRSToolsPlugin:
     def setTool(self):
         self.toolAction.setChecked(True)
         self.iface.mapCanvas().setMapTool(self.mapTool)
+
+    def showHelp(self):
+        if not QDesktopServices.openUrl(
+                QUrl('file://{}'.format(os.path.join(pluginPath, 'docs', 'html', 'index.html')))):
+            QMessageBox.warning(None,
+                                self.tr('Error'),
+                                self.tr('Can not open help URL in browser'))
 
     def unload(self):
         self.iface.mapCanvas().unsetMapTool(self.mapTool)
