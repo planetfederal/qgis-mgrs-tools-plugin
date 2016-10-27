@@ -9,7 +9,7 @@ qgisMinimumVersion=2.0
 author=Boundless (Victor Olaya)
 email=info@boundlessgeo.com
 
-icon=icons/desktop.png
+icon=icons/desktop.svg
 
 tags=boundless,mgrs,coordinates,grid
 
