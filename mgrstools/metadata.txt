@@ -8,6 +8,7 @@ qgisMinimumVersion=2.0
 
 author=Boundless (Victor Olaya)
 email=info@boundlessgeo.com
+roles=desktop-qgis-plugin-mgrs
 
 icon=icons/desktop.svg
 
