@@ -1,3 +1,4 @@
+from builtins import str
 # -*- coding: utf-8 -*-
 
 # (c) 2016 Boundless, http://boundlessgeo.com
@@ -6,9 +7,10 @@
 
 import os
 
-from PyQt4 import uic
-from PyQt4.QtCore import Qt
-from PyQt4.QtGui import QDockWidget, QIcon
+from qgis.PyQt import uic
+from qgis.PyQt.QtCore import Qt
+from qgis.PyQt.QtWidgets import QDockWidget
+from qgis.PyQt.QtGui import QIcon
 
 from qgis.core import QgsCoordinateReferenceSystem, QgsCoordinateTransform
 from qgis.gui import QgsVertexMarker
@@ -40,7 +42,7 @@ class MgrsDockWidget(BASE, WIDGET):
         self.btnRemoveMarker.setDisabled(True)
 
     def zoomToPressed(self):
-        mgrsCoord = unicode(self.leMgrsCoordinate.text()).strip()
+        mgrsCoord = str(self.leMgrsCoordinate.text()).strip()
         lat, lon = mgrs.toWgs(mgrsCoord)
         canvasCrs = self.canvas.mapSettings().destinationCrs()
         transform4326 = QgsCoordinateTransform(self.epsg4326, canvasCrs)

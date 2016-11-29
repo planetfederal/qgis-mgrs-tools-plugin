@@ -6,10 +6,19 @@
 
 import os
 
-from PyQt4.QtCore import QVariant
-from PyQt4.QtGui import QIcon
+from qgis.PyQt.QtCore import QVariant
+from qgis.PyQt.QtGui import QIcon
 
-from qgis.core import *
+try:
+    from qgis.core import  Qgis
+except ImportError:
+    from qgis.core import  QGis as Qgis
+
+from qgis.core import (QgsVectorDataProvider,
+                       QgsField,
+                       QgsCoordinateReferenceSystem,
+                       QgsCoordinateTransform
+                      )
 
 from processing.core.GeoAlgorithm import GeoAlgorithm
 from processing.core.GeoAlgorithmExecutionException import GeoAlgorithmExecutionException
@@ -35,9 +44,14 @@ class AddMgrsField(GeoAlgorithm):
         self.group = 'MGRS tools'
         self.i18n_group = self.tr(self.group)
 
-        self.addParameter(ParameterVector(self.INPUT,
-                                          self.tr('Input layer'),
-                                          [ParameterVector.VECTOR_TYPE_POINT]))
+        if Qgis.QGIS_VERSION_INT < 29900:
+            self.addParameter(ParameterVector(self.INPUT,
+                                              self.tr('Input layer'),
+                                              [ParameterVector.VECTOR_TYPE_POINT]))
+        else:
+            self.addParameter(ParameterVector(self.INPUT,
+                                              self.tr('Input layer'),
+                                              [dataobjects.TYPE_VECTOR_POINT]))
         self.addOutput(OutputVector(self.OUTPUT, self.tr('Output'), True))
 
     def processAlgorithm(self, progress):
@@ -67,7 +81,7 @@ class AddMgrsField(GeoAlgorithm):
             try:
                 pt4326 = transform.transform(pt.x(), pt.y())
                 mgrsCoord = mgrs.toMgrs(pt4326.y(), pt4326.x())
-            except Exception,e :
+            except Exception as e :
                 mgrsCoord = ''
 
             provider.changeAttributeValues({feat.id() : {idxField: mgrsCoord}})

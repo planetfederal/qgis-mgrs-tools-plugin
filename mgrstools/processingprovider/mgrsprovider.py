@@ -5,7 +5,7 @@
 
 import os
 
-from PyQt4.QtGui import QIcon
+from qgis.PyQt.QtGui import QIcon
 
 from processing.core.AlgorithmProvider import AlgorithmProvider
 from mgrstools.processingprovider.addmgrsfield import AddMgrsField

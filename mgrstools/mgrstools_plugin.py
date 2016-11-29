@@ -1,3 +1,4 @@
+from builtins import object
 # -*- coding: utf-8 -*-
 
 # (c) 2016 Boundless, http://boundlessgeo.com
@@ -6,8 +7,9 @@
 
 import os
 
-from PyQt4.QtCore import Qt, QCoreApplication, QUrl
-from PyQt4.QtGui import QIcon, QAction, QDesktopServices, QMessageBox
+from qgis.PyQt.QtCore import Qt, QCoreApplication, QUrl
+from qgis.PyQt.QtGui import QIcon, QDesktopServices
+from qgis.PyQt.QtWidgets import QAction, QMessageBox
 
 from qgis.core import QgsApplication
 
@@ -25,12 +27,12 @@ except:
 pluginPath = os.path.dirname(__file__)
 
 
-class MGRSToolsPlugin:
+class MGRSToolsPlugin(object):
 
     def __init__(self, iface):
         self.iface = iface
         try:
-            from tests import testerplugin
+            from mgrstools.tests import testerplugin
             from qgistester.tests import addTestModule
             addTestModule(testerplugin, 'MGRS tools')
         except:
@@ -111,7 +113,7 @@ class MGRSToolsPlugin:
             Processing.removeProvider(self.provider)
 
         try:
-            from tests import testerplugin
+            from .tests import testerplugin
             from qgistester.tests import removeTestModule
             removeTestModule(testerplugin, 'MGRS tools')
         except:

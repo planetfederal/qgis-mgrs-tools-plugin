@@ -4,7 +4,6 @@
 # This code is licensed under the GPL 2.0 license.
 #
 import os
-import xmlrpclib
 import zipfile
 import shutil
 

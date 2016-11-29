@@ -4,8 +4,8 @@
 # This code is licensed under the GPL 2.0 license.
 
 
-from PyQt4.QtCore import Qt
-from PyQt4.QtGui import QApplication
+from qgis.PyQt.QtCore import Qt
+from qgis.PyQt.QtWidgets import QApplication
 
 from qgis.core import QgsCoordinateReferenceSystem, QgsCoordinateTransform
 from qgis.gui import QgsMessageBar, QgsMapTool
@@ -28,7 +28,7 @@ class MGRSMapTool(QgsMapTool):
         pt4326 = transform.transform(pt.x(), pt.y())
         try:
             mgrsCoords = mgrs.toMgrs(pt4326.y(), pt4326.x())
-        except Exception, e:
+        except Exception as e:
             mgrsCoords = None
 
         return mgrsCoords
