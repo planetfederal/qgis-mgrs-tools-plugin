@@ -113,7 +113,7 @@ class MGRSToolsPlugin(object):
             Processing.removeProvider(self.provider)
 
         try:
-            from .tests import testerplugin
+            from mgrstools.tests import testerplugin
             from qgistester.tests import removeTestModule
             removeTestModule(testerplugin, 'MGRS tools')
         except:
