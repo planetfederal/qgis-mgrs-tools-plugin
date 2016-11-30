@@ -42,7 +42,6 @@ options(
 def setup(options):
     """Install run-time dependencies"""
     clean = getattr(options, 'clean', False)
-    develop = getattr(options, 'develop', False)
     ext_libs = options.plugin.ext_libs
     ext_src = options.plugin.ext_src
     if clean:
