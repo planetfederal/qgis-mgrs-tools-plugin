@@ -10,9 +10,9 @@ from qgis.PyQt.QtCore import QVariant
 from qgis.PyQt.QtGui import QIcon
 
 try:
-    from qgis.core import  Qgis
+    from qgis.core import  QGis
 except ImportError:
-    from qgis.core import  QGis as Qgis
+    from qgis.core import  Qgis as QGis
 
 from qgis.core import (QgsVectorDataProvider,
                        QgsField,
@@ -44,7 +44,7 @@ class AddMgrsField(GeoAlgorithm):
         self.group = 'MGRS tools'
         self.i18n_group = self.tr(self.group)
 
-        if Qgis.QGIS_VERSION_INT < 29900:
+        if QGis.QGIS_VERSION_INT < 29900:
             self.addParameter(ParameterVector(self.INPUT,
                                               self.tr('Input layer'),
                                               [ParameterVector.VECTOR_TYPE_POINT]))
