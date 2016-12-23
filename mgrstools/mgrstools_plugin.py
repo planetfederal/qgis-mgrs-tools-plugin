@@ -61,15 +61,15 @@ class MGRSToolsPlugin(object):
         self.iface.addPluginToMenu(self.tr('MGRS'), self.zoomToAction)
         self.zoomToAction.triggered.connect(self.zoomTo)
 
-        self.actionHelp = QAction(
-            QgsApplication.getThemeIcon('/mActionHelpContents.svg'),
+        self.helpAction = QAction(
+            QgsApplication.getThemeIcon('/mhelpActionContents.svg'),
             self.tr('Help'),
             self.iface.mainWindow())
-        self.actionHelp.setWhatsThis(
+        self.helpAction.setWhatsThis(
             self.tr('MGRS Tools documentation'))
-        self.actionHelp.setObjectName('actionMGRSHelp')
-        self.iface.addPluginToMenu(self.tr('MGRS'), self.actionHelp)
-        self.actionHelp.triggered.connect(self.showHelp)
+        self.helpAction.setObjectName('actionMGRSHelp')
+        self.iface.addPluginToMenu(self.tr('MGRS'), self.helpAction)
+        self.helpAction.triggered.connect(self.showHelp)
 
         self.mgrsDock = MgrsDockWidget(self.iface.mapCanvas(), self.iface.mainWindow())
         self.iface.addDockWidget(Qt.TopDockWidgetArea, self.mgrsDock)
@@ -96,7 +96,7 @@ class MGRSToolsPlugin(object):
 
     def showHelp(self):
         if not QDesktopServices.openUrl(
-                QUrl('file://{}'.format(os.path.join(pluginPath, 'docs', 'html', 'index.html')))):
+                QUrl.fromLocalFile(os.path.join(pluginPath, 'docs', 'html', 'index.html'))):
             QMessageBox.warning(None,
                                 self.tr('Error'),
                                 self.tr('Can not open help URL in browser'))
@@ -108,6 +108,7 @@ class MGRSToolsPlugin(object):
         self.iface.removeToolBarIcon(self.toolAction)
         self.iface.removePluginMenu(self.tr('MGRS'), self.toolAction)
         self.iface.removePluginMenu(self.tr('MGRS'), self.zoomToAction)
+        self.iface.removePluginMenu(self.tr('MGRS'), self.helpAction)
 
         if processingOk:
             Processing.removeProvider(self.provider)
