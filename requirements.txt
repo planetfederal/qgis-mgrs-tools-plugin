@@ -1,1 +1,2 @@
-https://github.com/boundlessgeo/mgrspy.git#egg=mgrspy
+future
+# test requirements

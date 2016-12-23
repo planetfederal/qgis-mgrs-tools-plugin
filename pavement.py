@@ -48,6 +48,14 @@ def setup(options):
         ext_libs.rmtree()
     ext_libs.makedirs()
 
+    runtime, test = read_requirements()
+    os.environ['PYTHONPATH']=ext_libs.abspath()
+    for req in runtime + test:
+        sh('easy_install -a -d %(ext_libs)s %(dep)s' % {
+            'ext_libs' : ext_libs.abspath(),
+            'dep' : req
+        })
+
     mgrsPath = ext_src / 'mgrspy'
     cwd = os.getcwd()
     if os.path.exists(mgrsPath):
