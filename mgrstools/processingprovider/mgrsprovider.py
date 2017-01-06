@@ -9,6 +9,7 @@ from qgis.PyQt.QtGui import QIcon
 
 from processing.core.AlgorithmProvider import AlgorithmProvider
 from mgrstools.processingprovider.addmgrsfield import AddMgrsField
+from mgrstools.processingprovider.layerfrommgrstable import LayerFromMgrsTable
 
 pluginPath = os.path.split(os.path.dirname(__file__))[0]
 
@@ -21,7 +22,7 @@ class MgrsProvider(AlgorithmProvider):
         self.activate = True
 
         # Load algorithms
-        self.alglist = [AddMgrsField()]
+        self.alglist = [AddMgrsField(), LayerFromMgrsTable()]
         for alg in self.alglist:
             alg.provider = self
 
