@@ -6,6 +6,7 @@ from builtins import object
 
 
 import os
+import webbrowser
 
 from qgis.PyQt.QtCore import Qt, QCoreApplication, QUrl
 from qgis.PyQt.QtGui import QIcon, QDesktopServices
@@ -95,11 +96,7 @@ class MGRSToolsPlugin(object):
         self.iface.mapCanvas().setMapTool(self.mapTool)
 
     def showHelp(self):
-        if not QDesktopServices.openUrl(
-                QUrl.fromLocalFile(os.path.join(pluginPath, 'docs', 'html', 'index.html'))):
-            QMessageBox.warning(None,
-                                self.tr('Error'),
-                                self.tr('Can not open help URL in browser'))
+        webbrowser.open_new("file://" + os.path.join(pluginPath, "docs", "html", "index.html"))
 
     def unload(self):
         self.iface.mapCanvas().unsetMapTool(self.mapTool)
