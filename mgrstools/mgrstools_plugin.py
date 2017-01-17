@@ -9,7 +9,7 @@ import os
 import webbrowser
 
 from qgis.PyQt.QtCore import Qt, QCoreApplication, QUrl
-from qgis.PyQt.QtGui import QIcon, QDesktopServices
+from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import QAction, QMessageBox
 
 from qgis.core import QgsApplication
