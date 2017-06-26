@@ -3,6 +3,7 @@
 
 import os
 from qgis.core import QgsMapLayerRegistry
+from qgis.utils import plugins
 
 def functionalTests():
     try:
