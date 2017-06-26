@@ -1,6 +1,7 @@
 # Tests for the QGIS Tester plugin. To know more see
 # https://github.com/boundlessgeo/qgis-tester-plugin
 
+import os
 from qgis.core import QgsMapLayerRegistry
 
 def functionalTests():
