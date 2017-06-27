@@ -22,7 +22,6 @@ try:
     from mgrstools.processingprovider.mgrsprovider import MgrsProvider
     processingOk = True
 except:
-    raise
     processingOk = False
 
 pluginPath = os.path.dirname(__file__)
