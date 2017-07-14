@@ -17,6 +17,11 @@ from qgis.core import QgsApplication
 from mgrstools.maptool import MGRSMapTool
 from mgrstools.gui.mgrsdock import MgrsDockWidget
 
+from qgiscommons.gui import (addAboutMenu,
+                             removeAboutMenu,
+                             addHelpMenu,
+                             removeHelpMenu)
+
 try:
     from processing.core.Processing import Processing
     from mgrstools.processingprovider.mgrsprovider import MgrsProvider
@@ -47,29 +52,22 @@ class MGRSToolsPlugin(object):
         self.iface.mapCanvas().mapToolSet.connect(self.unsetTool)
 
         self.toolAction = QAction(QIcon(os.path.join(pluginPath, 'icons', 'mgrs.svg')),
-                                  self.tr('MGRS map tool'),
+                                  'MGRS map tool',
                                   self.iface.mainWindow())
         self.toolAction.setCheckable(True)
         self.iface.addToolBarIcon(self.toolAction)
-        self.iface.addPluginToMenu(self.tr('MGRS'), self.toolAction)
+        self.iface.addPluginToMenu('MGRS', self.toolAction)
         self.toolAction.triggered.connect(self.setTool)
 
         zoomToIcon = QIcon(':/images/themes/default/mActionZoomIn.svg')
         self.zoomToAction = QAction(zoomToIcon,
-                                    self.tr('Zoom to MGRS coordinate'),
+                                    'Zoom to MGRS coordinate',
                                     self.iface.mainWindow())
-        self.iface.addPluginToMenu(self.tr('MGRS'), self.zoomToAction)
+        self.iface.addPluginToMenu('MGRS', self.zoomToAction)
         self.zoomToAction.triggered.connect(self.zoomTo)
 
-        self.helpAction = QAction(
-            QgsApplication.getThemeIcon('/mhelpActionContents.svg'),
-            self.tr('Help'),
-            self.iface.mainWindow())
-        self.helpAction.setWhatsThis(
-            self.tr('MGRS Tools documentation'))
-        self.helpAction.setObjectName('actionMGRSHelp')
-        self.iface.addPluginToMenu(self.tr('MGRS'), self.helpAction)
-        self.helpAction.triggered.connect(self.showHelp)
+        addHelpMenu("MGRS", self.iface.addPluginToMenu)
+        addAboutMenu("MGRS", self.iface.addPluginToMenu)
 
         self.mgrsDock = MgrsDockWidget(self.iface.mapCanvas(), self.iface.mainWindow())
         self.iface.addDockWidget(Qt.TopDockWidgetArea, self.mgrsDock)
@@ -102,9 +100,11 @@ class MGRSToolsPlugin(object):
         self.iface.removeDockWidget(self.mgrsDock)
         self.mgrsDock = None
         self.iface.removeToolBarIcon(self.toolAction)
-        self.iface.removePluginMenu(self.tr('MGRS'), self.toolAction)
-        self.iface.removePluginMenu(self.tr('MGRS'), self.zoomToAction)
-        self.iface.removePluginMenu(self.tr('MGRS'), self.helpAction)
+        self.iface.removePluginMenu('MGRS', self.toolAction)
+        self.iface.removePluginMenu('MGRS', self.zoomToAction)
+
+        removeHelpMenu("MGRS")
+        removeAboutMenu("MGRS")
 
         if processingOk:
             Processing.removeProvider(self.provider)
@@ -115,6 +115,3 @@ class MGRSToolsPlugin(object):
             removeTestModule(testerplugin, 'MGRS tools')
         except:
             pass
-
-    def tr(self, text):
-        return QCoreApplication.translate('MGRS tools', text)
