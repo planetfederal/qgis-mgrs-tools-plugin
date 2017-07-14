@@ -76,6 +76,13 @@ class MGRSToolsPlugin(object):
         if processingOk:
             Processing.addProvider(self.provider)
 
+        try:
+            from lessons import addLessonsFolder, addGroup
+            folder = os.path.join(os.path.dirname(__file__), "_lessons")
+            addLessonsFolder(folder, "MGRS tools")
+        except:
+            pass
+
     def zoomTo(self):
         self.mgrsDock.show()
 
@@ -113,5 +120,12 @@ class MGRSToolsPlugin(object):
             from mgrstools.tests import testerplugin
             from qgistester.tests import removeTestModule
             removeTestModule(testerplugin, 'MGRS tools')
+        except:
+            pass
+
+        try:
+            from lessons import removeLessonsFolder
+            folder = os.path.join(pluginPath, '_lessons')
+            removeLessonsFolder(folder)
         except:
             pass
