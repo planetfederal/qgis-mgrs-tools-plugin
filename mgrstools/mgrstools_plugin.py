@@ -6,7 +6,6 @@ from builtins import object
 
 
 import os
-import webbrowser
 
 from qgis.PyQt.QtCore import Qt, QCoreApplication, QUrl
 from qgis.PyQt.QtGui import QIcon
@@ -98,9 +97,6 @@ class MGRSToolsPlugin(object):
     def setTool(self):
         self.toolAction.setChecked(True)
         self.iface.mapCanvas().setMapTool(self.mapTool)
-
-    def showHelp(self):
-        webbrowser.open_new("file://" + os.path.join(pluginPath, "docs", "html", "index.html"))
 
     def unload(self):
         self.iface.mapCanvas().unsetMapTool(self.mapTool)
