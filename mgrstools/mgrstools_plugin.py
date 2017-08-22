@@ -16,7 +16,7 @@ from qgis.core import QgsApplication
 from mgrstools.maptool import MGRSMapTool
 from mgrstools.gui.mgrsdock import MgrsDockWidget
 
-from qgiscommons.gui import (addAboutMenu,
+from qgiscommons2.gui import (addAboutMenu,
                              removeAboutMenu,
                              addHelpMenu,
                              removeHelpMenu)
