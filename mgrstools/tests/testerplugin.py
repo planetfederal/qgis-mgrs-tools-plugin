@@ -4,17 +4,17 @@
 import os
 from qgis.core import QgsMapLayerRegistry
 from qgis.utils import plugins
+from qgiscommons2.layers import loadLayer
 
 def functionalTests():
     try:
         from qgistester.test import Test
-        from qgistester.utils import loadLayer
     except:
         return []
 
     def _loadLayer():
         layerfile = os.path.join(os.path.dirname(__file__), "data", "MGRS_100kmSQ_ID_02H.shp")
-        layer = loadLayer(layerfile)
+        layer = loadLayer(layerfile, provider="ogr")
         QgsMapLayerRegistry.instance().addMapLayer(layer)
 
     def _setTool():
