@@ -12,7 +12,7 @@ from qgis.PyQt.QtCore import Qt
 from qgis.PyQt.QtWidgets import QDockWidget
 from qgis.PyQt.QtGui import QIcon
 
-from qgis.core import QgsCoordinateReferenceSystem, QgsCoordinateTransform
+from qgis.core import QgsCoordinateReferenceSystem, QgsCoordinateTransform, QgsProject
 from qgis.gui import QgsVertexMarker
 
 from mgrspy import mgrs
@@ -34,7 +34,7 @@ class MgrsDockWidget(BASE, WIDGET):
         self.marker = None
 
         self.btnZoom.setIcon(QIcon(':/images/themes/default/mActionZoomIn.svg'))
-        self.btnRemoveMarker.setIcon(QIcon(':/images/themes/default/mIconClear.svg'))
+        self.btnRemoveMarker.setIcon(QIcon(':/images/themes/default/mIconDelete.svg'))
 
         self.leMgrsCoordinate.returnPressed.connect(self.zoomToPressed)
         self.btnZoom.clicked.connect(self.zoomToPressed)
@@ -45,7 +45,7 @@ class MgrsDockWidget(BASE, WIDGET):
         mgrsCoord = str(self.leMgrsCoordinate.text()).strip()
         lat, lon = mgrs.toWgs(mgrsCoord)
         canvasCrs = self.canvas.mapSettings().destinationCrs()
-        transform4326 = QgsCoordinateTransform(self.epsg4326, canvasCrs)
+        transform4326 = QgsCoordinateTransform(self.epsg4326, canvasCrs, QgsProject.instance())
         center = transform4326.transform(lon, lat)
         self.canvas.zoomByFactor(1, center)
         self.canvas.refresh()
