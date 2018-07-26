@@ -99,7 +99,7 @@ def install(options):
         dst = path('~/.local/share/QGIS/QGIS3/profiles/default/python/plugins').expanduser() / plugin_name
     src = src.abspath()
     dst = dst.abspath()
-    if not hasattr(os, 'symlink'):
+    if os.name == 'nt':
         dst.rmtree()
         src.copytree(dst)
     elif not dst.exists():

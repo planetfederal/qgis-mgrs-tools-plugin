@@ -5,82 +5,81 @@
 
 
 import os
-
-from qgis.PyQt.QtCore import QVariant
-from qgis.PyQt.QtGui import QIcon
-
-try:
-    from qgis.core import  QGis
-except ImportError:
-    from qgis.core import  Qgis as QGis
-
-from qgis.core import QgsCoordinateReferenceSystem, QgsPoint, QgsFeature, QgsGeometry
-
-from processing.core.GeoAlgorithm import GeoAlgorithm
-from processing.core.GeoAlgorithmExecutionException import GeoAlgorithmExecutionException
-from processing.core.parameters import ParameterTable, ParameterTableField
-from processing.core.outputs import OutputVector
-from processing.tools import dataobjects, vector
+from qgis.core import (QgsApplication,
+                       QgsWkbTypes,
+                       QgsPoint,
+                       QgsFeatureRequest,
+                       QgsGeometry,
+                       QgsProcessing,
+                       QgsProcessingParameterFeatureSink,
+                       QgsProcessingParameterFeatureSource,
+                       QgsProcessingParameterCrs,
+                       QgsProcessingParameterField)
+from processing.algs.qgis.QgisAlgorithm import QgisAlgorithm
 
 from mgrspy import mgrs
 
 pluginPath = os.path.split(os.path.dirname(__file__))[0]
 
-class LayerFromMgrsTable(GeoAlgorithm):
+class LayerFromMgrsTable(QgisAlgorithm):
 
     INPUT = 'INPUT'
     FIELD = 'FIELD'
     OUTPUT = 'OUTPUT'
 
-    def getIcon(self):
-        return QIcon(os.path.join(pluginPath, 'icons', 'mgrs.svg'))
+    def tags(self):
+        return self.tr('points,create,values,attributes').split(',')
 
-    def defineCharacteristics(self):
-        self.name = 'Create vector layer from table with MGRS field'
-        self.i18n_name = self.tr(self.name)
-        self.group = 'MGRS tools'
-        self.i18n_group = self.tr(self.group)
+    def group(self):
+        return self.tr('MGRS Tools')
 
-        self.addParameter(ParameterTable(self.INPUT,
-                                         self.tr('Input table')))
-        self.addParameter(ParameterTableField(self.FIELD,
-                                              self.tr('MGRS field'),
-                                              self.INPUT,
-                                              ParameterTableField.DATA_TYPE_STRING))
-        self.addOutput(OutputVector(self.OUTPUT, self.tr('Output')))
+    def groupId(self):
+        return 'mgrs'
 
-    def processAlgorithm(self, progress):
-        layer = dataobjects.getObjectFromUri(
-                self.getParameterValue(self.INPUT))
-        field = self.getParameterValue(self.FIELD)
-        output = self.getOutputFromName(self.OUTPUT)
+    def __init__(self):
+        super().__init__()
 
-        idx = layer.fieldNameIndex(field)
-        fields = layer.fields()
+    def initAlgorithm(self, config=None):
+        self.addParameter(QgsProcessingParameterFeatureSource(self.INPUT, self.tr('Input layer'), types=[QgsProcessing.TypeVector]))
+        self.addParameter(QgsProcessingParameterField(self.FIELD,
+                                                      self.tr('M field'), parentLayerParameterName=self.INPUT, type=QgsProcessingParameterField.String))
+        self.addParameter(QgsProcessingParameterFeatureSink(self.OUTPUT, self.tr('Points from table'), type=QgsProcessing.TypeVectorPoint))
 
-        epsg4326 = QgsCoordinateReferenceSystem('EPSG:4326')
+    def name(self):
+        return 'createpointslayerfrommgrstable'
 
-        if QGis.QGIS_VERSION_INT < 29900:
-            writer = output.getVectorWriter(fields, QGis.WKBPoint, epsg4326)
-        else:
-            from qgis.core import QgsWkbTypes
-            writer = output.getVectorWriter(fields, QgsWkbTypes.Point, epsg4326)
+    def displayName(self):
+        return self.tr('Create points layer from table with MGRS coordinates')
 
-        features = vector.features(layer)
-        total = 100.0 / len(features)
+    def processAlgorithm(self, parameters, context, feedback):
+        source = self.parameterAsSource(parameters, self.INPUT, context)
 
-        outFeat = QgsFeature()
+        fields = source.fields()
+        idx = fields.lookupField(self.parameterAsString(parameters, self.FIELD, context))
+
+        (sink, dest_id) = self.parameterAsSink(parameters, self.OUTPUT, context,
+                                               source.fields(), QgsWkbTypes.Point, 
+                                               QgsCoordinateReferenceSystem("EPSG:4326"))
+
+        features = source.getFeatures()
+        total = 100.0 / source.featureCount() if source.featureCount() else 0
+
         for current, feature in enumerate(features):
+            if feedback.isCanceled():
+                break
+
+            feedback.setProgress(int(current * total))
+            attrs = feature.attributes()
+
             try:
                 mgrsCoord = feature[idx]
                 y, x = mgrs.toWgs(mgrsCoord)
+                point = QgsPoint(x, y)
+                feature.setGeometry(QgsGeometry(point))
             except:
                 pass
 
-            pt = QgsPoint(x, y)
-            outFeat.setGeometry(QgsGeometry.fromPoint(pt))
-            outFeat.setAttributes(feature.attributes())
-            writer.addFeature(outFeat)
-            progress.setPercentage(int(current * total))
+            sink.addFeature(feature)
 
-        del writer
+        return {self.OUTPUT: dest_id}
+

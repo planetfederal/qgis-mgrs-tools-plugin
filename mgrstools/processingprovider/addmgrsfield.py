@@ -7,83 +7,77 @@
 import os
 
 from qgis.PyQt.QtCore import QVariant
-from qgis.PyQt.QtGui import QIcon
-
-try:
-    from qgis.core import  QGis
-except ImportError:
-    from qgis.core import  Qgis as QGis
-
-from qgis.core import (QgsVectorDataProvider,
-                       QgsField,
+from qgis.core import (QgsProcessingException,
                        QgsCoordinateReferenceSystem,
-                       QgsCoordinateTransform
-                      )
-
-from processing.core.GeoAlgorithm import GeoAlgorithm
-from processing.core.GeoAlgorithmExecutionException import GeoAlgorithmExecutionException
-from processing.core.parameters import ParameterVector
-from processing.core.outputs import OutputVector
-from processing.tools import dataobjects, vector
+                       QgsCoordinateTransform,
+                       QgsField,
+                       QgsProject,
+                       QgsFeatureSink,
+                       QgsProcessingParameterFeatureSource,
+                       QgsProcessingParameterString,
+                       QgsProcessingParameterEnum,
+                       QgsProcessingParameterNumber,
+                       QgsProcessingParameterFeatureSink)
+from processing.algs.qgis.QgisAlgorithm import QgisAlgorithm
 
 from mgrspy import mgrs
 
 pluginPath = os.path.split(os.path.dirname(__file__))[0]
 
-class AddMgrsField(GeoAlgorithm):
+class AddMgrsField(QgisAlgorithm):
 
     INPUT = 'INPUT'
     OUTPUT = 'OUTPUT'
 
-    def getIcon(self):
-        return QIcon(os.path.join(pluginPath, 'icons', 'mgrs.svg'))
+    def group(self):
+        return self.tr('MGRS Tools')
 
-    def defineCharacteristics(self):
-        self.name = 'Add MGRS field to points layer'
-        self.i18n_name = self.tr(self.name)
-        self.group = 'MGRS tools'
-        self.i18n_group = self.tr(self.group)
+    def groupId(self):
+        return 'mgrs'
 
-        if QGis.QGIS_VERSION_INT < 29900:
-            self.addParameter(ParameterVector(self.INPUT,
-                                              self.tr('Input layer'),
-                                              [ParameterVector.VECTOR_TYPE_POINT]))
-        else:
-            self.addParameter(ParameterVector(self.INPUT,
-                                              self.tr('Input layer'),
-                                              [dataobjects.TYPE_VECTOR_POINT]))
-        self.addOutput(OutputVector(self.OUTPUT, self.tr('Output'), True))
+    def __init__(self):
+        super().__init__()
 
-    def processAlgorithm(self, progress):
-        filename = self.getParameterValue(self.INPUT)
-        layer = dataobjects.getObjectFromUri(filename)
-        provider = layer.dataProvider()
+    def initAlgorithm(self, config=None):
+        self.addParameter(QgsProcessingParameterFeatureSource(self.INPUT, self.tr('Input layer')))
+        self.addParameter(QgsProcessingParameterFeatureSink(self.OUTPUT,
+                                                            self.tr('Output')))
 
-        caps = provider.capabilities()
-        if not (caps & QgsVectorDataProvider.AddAttributes):
-            raise GeoAlgorithmExecutionException('The selected layer does not '
-                                                ' support adding new attributes.')
+    def name(self):
+        return 'addmgrsfield'
 
-        fields = layer.fields()
-        idxField = fields.indexFromName('MGRS')
-        if idxField == -1:
-            provider.addAttributes([QgsField('MGRS', QVariant.String)])
-            layer.updateFields()
-            idxField = len(fields)
+    def displayName(self):
+        return self.tr('Add MGRS Field')
+
+    def processAlgorithm(self, parameters, context, feedback):
+        source = self.parameterAsSource(parameters, self.INPUT, context)        
+        fields = source.fields()
+        field = QgsField("MGRS", QVariant.String)
+        fields.append(field)
+        (sink, dest_id) = self.parameterAsSink(parameters, self.OUTPUT, context,
+                                               fields, source.wkbType(), source.sourceCrs())
+
+        features = source.getFeatures()
+        total = 100.0 / source.featureCount() if source.featureCount() else 0
 
         epsg4326 = QgsCoordinateReferenceSystem('EPSG:4326')
-        transform = QgsCoordinateTransform(layer.crs(), epsg4326)
+        transform = QgsCoordinateTransform(source.sourceCrs(), epsg4326, QgsProject.instance())
 
-        features = vector.features(layer)
-        total = 100.0 / float(len(features))
-        for i, feat in enumerate(features):
-            pt = feat.geometry().asPoint()
+        for current, feat in enumerate(features):
+            if feedback.isCanceled():
+                break
+
+            feedback.setProgress(int(current * total))
+            attrs = feat.attributes()
+            pt = feat.geometry().centroid().asPoint()
             try:
                 pt4326 = transform.transform(pt.x(), pt.y())
                 mgrsCoord = mgrs.toMgrs(pt4326.y(), pt4326.x())
             except Exception as e :
                 mgrsCoord = ''
 
-            provider.changeAttributeValues({feat.id() : {idxField: mgrsCoord}})
+            attrs.append(mgrsCoord)
+            feat.setAttributes(attrs)
+            sink.addFeature(feat, QgsFeatureSink.FastInsert)
 
-        self.setOutputValue(self.OUTPUT, filename)
+        return {self.OUTPUT: dest_id}
