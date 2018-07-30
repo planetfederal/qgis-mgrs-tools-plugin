@@ -14,7 +14,8 @@ from qgis.core import (QgsApplication,
                        QgsProcessingParameterFeatureSink,
                        QgsProcessingParameterFeatureSource,
                        QgsProcessingParameterCrs,
-                       QgsProcessingParameterField)
+                       QgsProcessingParameterField,
+                       QgsCoordinateReferenceSystem)
 from processing.algs.qgis.QgisAlgorithm import QgisAlgorithm
 
 from mgrspy import mgrs
@@ -58,7 +59,7 @@ class LayerFromMgrsTable(QgisAlgorithm):
         idx = fields.lookupField(self.parameterAsString(parameters, self.FIELD, context))
 
         (sink, dest_id) = self.parameterAsSink(parameters, self.OUTPUT, context,
-                                               source.fields(), QgsWkbTypes.Point, 
+                                               source.fields(), QgsWkbTypes.Point,
                                                QgsCoordinateReferenceSystem("EPSG:4326"))
 
         features = source.getFeatures()
@@ -82,4 +83,3 @@ class LayerFromMgrsTable(QgisAlgorithm):
             sink.addFeature(feature)
 
         return {self.OUTPUT: dest_id}
-
