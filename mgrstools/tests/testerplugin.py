@@ -2,7 +2,7 @@
 # https://github.com/boundlessgeo/qgis-tester-plugin
 
 import os
-from qgis.core import QgsMapLayerRegistry
+from qgis.core import QgsProject
 from qgis.utils import plugins
 from qgiscommons2.layers import loadLayer
 
@@ -15,7 +15,7 @@ def functionalTests():
     def _loadLayer():
         layerfile = os.path.join(os.path.dirname(__file__), "data", "MGRS_100kmSQ_ID_02H.shp")
         layer = loadLayer(layerfile, provider="ogr")
-        QgsMapLayerRegistry.instance().addMapLayer(layer)
+        QgsProject.instance().addMapLayer(layer)
 
     def _setTool():
         plugins["mgrstools"].setTool()

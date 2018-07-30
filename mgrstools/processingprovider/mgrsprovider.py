@@ -7,39 +7,46 @@ import os
 
 from qgis.PyQt.QtGui import QIcon
 
-from processing.core.AlgorithmProvider import AlgorithmProvider
+from qgis.core import QgsProcessingProvider
 from mgrstools.processingprovider.addmgrsfield import AddMgrsField
 from mgrstools.processingprovider.layerfrommgrstable import LayerFromMgrsTable
+from processing.core.ProcessingConfig import Setting, ProcessingConfig
 
 pluginPath = os.path.split(os.path.dirname(__file__))[0]
 
-
-class MgrsProvider(AlgorithmProvider):
+class MgrsProvider(QgsProcessingProvider):
 
     def __init__(self):
-        AlgorithmProvider.__init__(self)
+        super().__init__()
 
-        self.activate = True
-
-        # Load algorithms
-        self.alglist = [AddMgrsField(), LayerFromMgrsTable()]
-        for alg in self.alglist:
-            alg.provider = self
-
-    def initializeSettings(self):
-        AlgorithmProvider.initializeSettings(self)
+    def load(self):
+        ProcessingConfig.settingIcons[self.name()] = self.icon()
+        ProcessingConfig.addSetting(Setting(self.name(), 'ACTIVATE_MGRS',
+                                            'Activate', False))
+        ProcessingConfig.readSettings()
+        self.refreshAlgorithms()
+        return True
 
     def unload(self):
-        AlgorithmProvider.unload(self)
+        pass
 
-    def getName(self):
+    def isActive(self):
+        """Return True if the provider is activated and ready to run algorithms"""
+        return ProcessingConfig.getSetting('ACTIVATE_MGRS')
+
+    def setActive(self, active):
+        ProcessingConfig.setSettingValue('ACTIVATE_MGRS', active)
+
+    def id(self):
         return 'mgrs'
 
-    def getDescription(self):
-        return 'MGRS tools'
+    def name(self):        
+        return 'MGRS Tools'
 
-    def getIcon(self):
+    def icon(self):        
         return QIcon(os.path.join(pluginPath, 'icons', 'mgrs.svg'))
 
-    def _loadAlgorithms(self):
-        self.algs = self.alglist
+    def loadAlgorithms(self):
+        for alg in [AddMgrsField(), LayerFromMgrsTable()]:
+            self.addAlgorithm(alg)
+

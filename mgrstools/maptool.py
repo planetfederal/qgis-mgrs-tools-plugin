@@ -7,7 +7,7 @@
 from qgis.PyQt.QtCore import Qt
 from qgis.PyQt.QtWidgets import QApplication
 
-from qgis.core import QgsCoordinateReferenceSystem, QgsCoordinateTransform
+from qgis.core import QgsCoordinateReferenceSystem, QgsCoordinateTransform, QgsProject, Qgis
 from qgis.gui import QgsMessageBar, QgsMapTool
 from qgis.utils import iface
 
@@ -24,7 +24,7 @@ class MGRSMapTool(QgsMapTool):
     def toMgrs(self, pt):
         canvas = iface.mapCanvas()
         canvasCrs = canvas.mapSettings().destinationCrs()
-        transform = QgsCoordinateTransform(canvasCrs, self.epsg4326)
+        transform = QgsCoordinateTransform(canvasCrs, self.epsg4326, QgsProject.instance())
         pt4326 = transform.transform(pt.x(), pt.y())
         try:
             mgrsCoords = mgrs.toMgrs(pt4326.y(), pt4326.x())
@@ -37,9 +37,9 @@ class MGRSMapTool(QgsMapTool):
         pt = self.toMapCoordinates(e.pos())
         mgrsCoord = self.toMgrs(pt)
         if mgrsCoord:
-            iface.mainWindow().statusBar().showMessage(self.tr('MGRS Coordinate: {}'.format(mgrsCoord)))
+            iface.statusBarIface().showMessage(self.tr('MGRS Coordinate: {}'.format(mgrsCoord)))
         else:
-            iface.mainWindow().statusBar().showMessage('')
+            iface.statusBarIface().showMessage('')
 
     def canvasReleaseEvent(self, e):
         pt = self.toMapCoordinates(e.pos())
@@ -49,5 +49,5 @@ class MGRSMapTool(QgsMapTool):
             clipboard.setText(mgrsCoord)
             iface.messageBar().pushMessage(self.tr('MGRS Tools'),
                                            self.tr('Coordinate "{}" copied to clipboard'.format(mgrsCoord)),
-                                           level=QgsMessageBar.INFO,
+                                           level=Qgis.Info,
                                            duration=3)

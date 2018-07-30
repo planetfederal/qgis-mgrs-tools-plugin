@@ -15,18 +15,12 @@ from qgis.core import QgsApplication
 
 from mgrstools.maptool import MGRSMapTool
 from mgrstools.gui.mgrsdock import MgrsDockWidget
+from mgrstools.processingprovider.mgrsprovider import MgrsProvider
 
 from qgiscommons2.gui import (addAboutMenu,
                              removeAboutMenu,
                              addHelpMenu,
                              removeHelpMenu)
-
-try:
-    from processing.core.Processing import Processing
-    from mgrstools.processingprovider.mgrsprovider import MgrsProvider
-    processingOk = True
-except:
-    processingOk = False
 
 pluginPath = os.path.dirname(__file__)
 
@@ -42,9 +36,7 @@ class MGRSToolsPlugin(object):
         except:
             pass
 
-        if processingOk:
-            self.provider = MgrsProvider()
-
+        self.provider = MgrsProvider()
 
     def initGui(self):
         self.mapTool = MGRSMapTool(self.iface.mapCanvas())
@@ -72,15 +64,14 @@ class MGRSToolsPlugin(object):
         self.iface.addDockWidget(Qt.TopDockWidgetArea, self.mgrsDock)
         self.mgrsDock.hide()
 
-        if processingOk:
-            Processing.addProvider(self.provider)
-
         try:
             from lessons import addLessonsFolder, addGroup
             folder = os.path.join(os.path.dirname(__file__), "_lessons")
             addLessonsFolder(folder, "MGRS tools")
         except:
             pass
+
+        QgsApplication.processingRegistry().addProvider(self.provider)
 
     def zoomTo(self):
         self.mgrsDock.show()
@@ -109,8 +100,7 @@ class MGRSToolsPlugin(object):
         removeHelpMenu("MGRS")
         removeAboutMenu("MGRS")
 
-        if processingOk:
-            Processing.removeProvider(self.provider)
+        QgsApplication.processingRegistry().removeProvider(self.provider)
 
         try:
             from mgrstools.tests import testerplugin
