@@ -4,7 +4,7 @@
 import os
 from qgis.core import QgsProject, QgsApplication
 from qgis.utils import plugins, iface
-from qgiscommons2.layers import loadLayer
+from qgiscommons2.layers import loadLayer, layerFromName
 from processing.gui.MessageDialog import MessageDialog
 from processing.gui.AlgorithmDialog import AlgorithmDialog
 
@@ -45,6 +45,12 @@ def functionalTests():
         dlg.show()
         dlg.exec_()
 
+    def _setLayerStyle(layer_name,style_file_name):
+        layer = layerFromName(layer_name)
+        style_file = os.path.join(os.path.dirname(__file__), 'data', style_file_name + '.qml')
+        layer.loadNamedStyle(style_file)
+        return
+
     def _setTool():
         plugins["mgrstools"].setTool()
 
@@ -71,6 +77,7 @@ def functionalTests():
     mgrsAddMGRSField = Test("Test Add MRGS field algorithm")
     mgrsAddMGRSField.addStep("Load test project", lambda: _loadTestProject("add_mgrs_field"))
     mgrsAddMGRSField.addStep("Opening algorithm dialog. Run the algorithm using the 'points_no_mgrs' layer", lambda: _executeProcessingAlgorithm("mgrs:addmgrsfield"))
+    mgrsAddMGRSField.addStep("Apply layer style", lambda: _setLayerStyle('Output','mgrs_compare'))
     mgrsAddMGRSField.addStep("Open 'Output' layer's table of attributes. Confirm it contains a MGRS field, which values are compatible with the 'MGRS_compare' field.", isVerifyStep=True)
 
 
