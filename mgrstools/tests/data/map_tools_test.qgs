@@ -19,26 +19,26 @@
   </projectCrs>
   <layer-tree-group>
     <customproperties/>
-    <layer-tree-layer expanded="1" checked="Qt::Checked" source="./clean_MGRS_100kmSQ_ID_02H.shp" name="clean_MGRS_100kmSQ_ID_02H" id="clean_MGRS_100kmSQ_ID_02H_43dd0f92_c788_4484_9670_469c3cd8158a" providerKey="ogr">
+    <layer-tree-layer expanded="1" checked="Qt::Checked" source="./test_data.gpkg|layername=clean_utm_grid" name="test_data clean_utm_grid" id="test_data_6e5a7a1b_1821_4f5b_9c05_bb5bc210d507" providerKey="ogr">
       <customproperties/>
     </layer-tree-layer>
     <custom-order enabled="0">
-      <item>clean_MGRS_100kmSQ_ID_02H_43dd0f92_c788_4484_9670_469c3cd8158a</item>
+      <item>test_data_6e5a7a1b_1821_4f5b_9c05_bb5bc210d507</item>
     </custom-order>
   </layer-tree-group>
   <snapping-settings tolerance="12" unit="1" intersection-snapping="0" enabled="0" mode="2" type="1">
     <individual-layer-settings>
-      <layer-setting tolerance="12" units="1" enabled="0" id="clean_MGRS_100kmSQ_ID_02H_43dd0f92_c788_4484_9670_469c3cd8158a" type="1"/>
+      <layer-setting tolerance="12" units="1" enabled="0" id="test_data_6e5a7a1b_1821_4f5b_9c05_bb5bc210d507" type="1"/>
     </individual-layer-settings>
   </snapping-settings>
   <relations/>
   <mapcanvas annotationsVisible="1" name="theMapCanvas">
     <units>meters</units>
     <extent>
-      <xmin>208252.34708356740884483</xmin>
-      <ymin>5575336.57983028143644333</ymin>
-      <xmax>791747.65291644935496151</xmax>
-      <ymax>6422036.12952269241213799</ymax>
+      <xmin>289999.99843749997671694</xmin>
+      <ymin>5579999.97499999962747097</ymin>
+      <xmax>710000.06406250002328306</xmax>
+      <ymax>6420001.02500000037252903</ymax>
     </extent>
     <rotation>0</rotation>
     <destinationsrs>
@@ -56,9 +56,9 @@
     <rendermaptile>0</rendermaptile>
   </mapcanvas>
   <legend updateDrawingOrder="true">
-    <legendlayer showFeatureCount="0" open="true" checked="Qt::Checked" drawingOrder="-1" name="clean_MGRS_100kmSQ_ID_02H">
+    <legendlayer showFeatureCount="0" open="true" checked="Qt::Checked" drawingOrder="-1" name="test_data clean_utm_grid">
       <filegroup open="true" hidden="false">
-        <legendlayerfile visible="1" layerid="clean_MGRS_100kmSQ_ID_02H_43dd0f92_c788_4484_9670_469c3cd8158a" isInOverview="0"/>
+        <legendlayerfile visible="1" layerid="test_data_6e5a7a1b_1821_4f5b_9c05_bb5bc210d507" isInOverview="0"/>
       </filegroup>
     </legendlayer>
   </legend>
@@ -67,17 +67,17 @@
   <projectlayers>
     <maplayer simplifyDrawingHints="1" autoRefreshEnabled="0" simplifyAlgorithm="0" simplifyMaxScale="1" refreshOnNotifyMessage="" readOnly="0" hasScaleBasedVisibilityFlag="0" minScale="1e+8" refreshOnNotifyEnabled="0" labelsEnabled="0" simplifyDrawingTol="1" simplifyLocal="1" type="vector" maxScale="0" autoRefreshTime="0" geometry="Polygon">
       <extent>
-        <xmin>300000.00000000017462298</xmin>
-        <ymin>5600000.00000000093132257</ymin>
-        <xmax>700000.00000000128056854</xmax>
-        <ymax>6400000.00000000093132257</ymax>
+        <xmin>300000</xmin>
+        <ymin>5600000</ymin>
+        <xmax>700000.0625</xmax>
+        <ymax>6400001</ymax>
       </extent>
-      <id>clean_MGRS_100kmSQ_ID_02H_43dd0f92_c788_4484_9670_469c3cd8158a</id>
-      <datasource>./clean_MGRS_100kmSQ_ID_02H.shp</datasource>
+      <id>test_data_6e5a7a1b_1821_4f5b_9c05_bb5bc210d507</id>
+      <datasource>./test_data.gpkg|layername=clean_utm_grid</datasource>
       <keywordList>
         <value></value>
       </keywordList>
-      <layername>clean_MGRS_100kmSQ_ID_02H</layername>
+      <layername>test_data clean_utm_grid</layername>
       <srs>
         <spatialrefsys>
           <proj4>+proj=utm +zone=2 +south +datum=WGS84 +units=m +no_defs</proj4>
@@ -97,6 +97,15 @@
         <type></type>
         <title></title>
         <abstract></abstract>
+        <contact>
+          <name></name>
+          <organization></organization>
+          <position></position>
+          <voice></voice>
+          <fax></fax>
+          <email></email>
+          <role></role>
+        </contact>
         <links/>
         <fees></fees>
         <encoding></encoding>
@@ -109,10 +118,18 @@
             <description></description>
             <projectionacronym></projectionacronym>
             <ellipsoidacronym></ellipsoidacronym>
-            <geographicflag>true</geographicflag>
+            <geographicflag>false</geographicflag>
           </spatialrefsys>
         </crs>
-        <extent/>
+        <extent>
+          <spatial minx="0" miny="0" maxz="0" crs="" maxx="0" maxy="0" dimensions="2" minz="0"/>
+          <temporal>
+            <period>
+              <start></start>
+              <end></end>
+            </period>
+          </temporal>
+        </extent>
       </resourceMetadata>
       <provider encoding="UTF-8">ogr</provider>
       <vectorjoins/>
@@ -129,7 +146,7 @@
           <symbol alpha="1" name="0" type="fill" clip_to_extent="1">
             <layer pass="0" class="SimpleFill" locked="0" enabled="1">
               <prop v="3x:0,0,0,0,0,0" k="border_width_map_unit_scale"/>
-              <prop v="190,207,80,255" k="color"/>
+              <prop v="95,217,223,255" k="color"/>
               <prop v="bevel" k="joinstyle"/>
               <prop v="0,0" k="offset"/>
               <prop v="3x:0,0,0,0,0,0" k="offset_map_unit_scale"/>
@@ -152,41 +169,66 @@
         <rotation/>
         <sizescale/>
       </renderer-v2>
-      <customproperties/>
+      <customproperties>
+        <property value="0" key="embeddedWidgets/count"/>
+        <property key="variableNames"/>
+        <property key="variableValues"/>
+      </customproperties>
       <blendMode>0</blendMode>
       <featureBlendMode>0</featureBlendMode>
       <layerOpacity>1</layerOpacity>
+      <SingleCategoryDiagramRenderer attributeLegend="1" diagramType="Histogram">
+        <DiagramCategory maxScaleDenominator="1e+8" backgroundAlpha="255" minScaleDenominator="0" labelPlacementMethod="XHeight" scaleBasedVisibility="0" opacity="1" penColor="#000000" enabled="0" lineSizeType="MM" rotationOffset="270" scaleDependency="Area" sizeScale="3x:0,0,0,0,0,0" sizeType="MM" minimumSize="0" penAlpha="255" backgroundColor="#ffffff" penWidth="0" height="15" width="15" diagramOrientation="Up" lineSizeScale="3x:0,0,0,0,0,0" barWidth="5">
+          <fontProperties style="" description="Ubuntu,11,-1,5,50,0,0,0,0,0"/>
+        </DiagramCategory>
+      </SingleCategoryDiagramRenderer>
+      <DiagramLayerSettings priority="0" placement="1" zIndex="0" showAll="1" dist="0" linePlacementFlags="18" obstacle="0">
+        <properties>
+          <Option type="Map">
+            <Option value="" name="name" type="QString"/>
+            <Option name="properties"/>
+            <Option value="collection" name="type" type="QString"/>
+          </Option>
+        </properties>
+      </DiagramLayerSettings>
       <fieldConfiguration>
+        <field name="fid">
+          <editWidget type="TextEdit">
+            <config>
+              <Option/>
+            </config>
+          </editWidget>
+        </field>
         <field name="100kmSQ_ID">
-          <editWidget type="">
+          <editWidget type="TextEdit">
             <config>
               <Option/>
             </config>
           </editWidget>
         </field>
         <field name="EASTING">
-          <editWidget type="">
+          <editWidget type="TextEdit">
             <config>
               <Option/>
             </config>
           </editWidget>
         </field>
         <field name="NORTHING">
-          <editWidget type="">
+          <editWidget type="TextEdit">
             <config>
               <Option/>
             </config>
           </editWidget>
         </field>
         <field name="GZD">
-          <editWidget type="">
+          <editWidget type="TextEdit">
             <config>
               <Option/>
             </config>
           </editWidget>
         </field>
         <field name="MGRS_1">
-          <editWidget type="">
+          <editWidget type="TextEdit">
             <config>
               <Option/>
             </config>
@@ -194,15 +236,17 @@
         </field>
       </fieldConfiguration>
       <aliases>
-        <alias field="100kmSQ_ID" index="0" name=""/>
-        <alias field="EASTING" index="1" name=""/>
-        <alias field="NORTHING" index="2" name=""/>
-        <alias field="GZD" index="3" name=""/>
-        <alias field="MGRS_1" index="4" name=""/>
+        <alias field="fid" index="0" name=""/>
+        <alias field="100kmSQ_ID" index="1" name=""/>
+        <alias field="EASTING" index="2" name=""/>
+        <alias field="NORTHING" index="3" name=""/>
+        <alias field="GZD" index="4" name=""/>
+        <alias field="MGRS_1" index="5" name=""/>
       </aliases>
       <excludeAttributesWMS/>
       <excludeAttributesWFS/>
       <defaults>
+        <default applyOnUpdate="0" expression="" field="fid"/>
         <default applyOnUpdate="0" expression="" field="100kmSQ_ID"/>
         <default applyOnUpdate="0" expression="" field="EASTING"/>
         <default applyOnUpdate="0" expression="" field="NORTHING"/>
@@ -210,6 +254,7 @@
         <default applyOnUpdate="0" expression="" field="MGRS_1"/>
       </defaults>
       <constraints>
+        <constraint unique_strength="1" constraints="3" notnull_strength="1" field="fid" exp_strength="0"/>
         <constraint unique_strength="0" constraints="0" notnull_strength="0" field="100kmSQ_ID" exp_strength="0"/>
         <constraint unique_strength="0" constraints="0" notnull_strength="0" field="EASTING" exp_strength="0"/>
         <constraint unique_strength="0" constraints="0" notnull_strength="0" field="NORTHING" exp_strength="0"/>
@@ -217,6 +262,7 @@
         <constraint unique_strength="0" constraints="0" notnull_strength="0" field="MGRS_1" exp_strength="0"/>
       </constraints>
       <constraintExpressions>
+        <constraint desc="" field="fid" exp=""/>
         <constraint desc="" field="100kmSQ_ID" exp=""/>
         <constraint desc="" field="EASTING" exp=""/>
         <constraint desc="" field="NORTHING" exp=""/>
@@ -227,29 +273,67 @@
         <defaultAction value="{00000000-0000-0000-0000-000000000000}" key="Canvas"/>
       </attributeactions>
       <attributetableconfig actionWidgetStyle="dropDown" sortExpression="" sortOrder="0">
-        <columns/>
+        <columns>
+          <column name="fid" width="-1" type="field" hidden="0"/>
+          <column name="100kmSQ_ID" width="-1" type="field" hidden="0"/>
+          <column name="EASTING" width="-1" type="field" hidden="0"/>
+          <column name="NORTHING" width="-1" type="field" hidden="0"/>
+          <column name="GZD" width="-1" type="field" hidden="0"/>
+          <column name="MGRS_1" width="-1" type="field" hidden="0"/>
+          <column width="-1" type="actions" hidden="1"/>
+        </columns>
       </attributetableconfig>
       <editform tolerant="1"></editform>
       <editforminit/>
       <editforminitcodesource>0</editforminitcodesource>
       <editforminitfilepath></editforminitfilepath>
-      <editforminitcode><![CDATA[]]></editforminitcode>
+      <editforminitcode><![CDATA[# -*- coding: utf-8 -*-
+"""
+QGIS forms can have a Python function that is called when the form is
+opened.
+
+Use this function to add extra logic to your forms.
+
+Enter the name of the function in the "Python Init function"
+field.
+An example follows:
+"""
+from qgis.PyQt.QtWidgets import QWidget
+
+def my_form_open(dialog, layer, feature):
+	geom = feature.geometry()
+	control = dialog.findChild(QWidget, "MyLineEdit")
+]]></editforminitcode>
       <featformsuppress>0</featformsuppress>
       <editorlayout>generatedlayout</editorlayout>
-      <editable/>
-      <labelOnTop/>
+      <editable>
+        <field editable="1" name="100kmSQ_ID"/>
+        <field editable="1" name="EASTING"/>
+        <field editable="1" name="GZD"/>
+        <field editable="1" name="MGRS_1"/>
+        <field editable="1" name="NORTHING"/>
+        <field editable="1" name="fid"/>
+      </editable>
+      <labelOnTop>
+        <field name="100kmSQ_ID" labelOnTop="0"/>
+        <field name="EASTING" labelOnTop="0"/>
+        <field name="GZD" labelOnTop="0"/>
+        <field name="MGRS_1" labelOnTop="0"/>
+        <field name="NORTHING" labelOnTop="0"/>
+        <field name="fid" labelOnTop="0"/>
+      </labelOnTop>
       <widgets/>
       <conditionalstyles>
         <rowstyles/>
         <fieldstyles/>
       </conditionalstyles>
       <expressionfields/>
-      <previewExpression></previewExpression>
+      <previewExpression>fid</previewExpression>
       <mapTip></mapTip>
     </maplayer>
   </projectlayers>
   <layerorder>
-    <layer id="clean_MGRS_100kmSQ_ID_02H_43dd0f92_c788_4484_9670_469c3cd8158a"/>
+    <layer id="test_data_6e5a7a1b_1821_4f5b_9c05_bb5bc210d507"/>
   </layerorder>
   <properties>
     <PositionPrecision>
