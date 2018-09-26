@@ -29,14 +29,14 @@ class MGRSToolsPlugin(object):
 
     def __init__(self, iface):
         self.iface = iface
+
+        self.provider = MgrsProvider()
         try:
             from mgrstools.tests import testerplugin
             from qgistester.tests import addTestModule
             addTestModule(testerplugin, 'MGRS tools')
         except:
             pass
-
-        self.provider = MgrsProvider()
 
     def initGui(self):
         self.mapTool = MGRSMapTool(self.iface.mapCanvas())
