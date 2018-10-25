@@ -14,10 +14,7 @@ The MGRS Tools is a QGIS plugin that enables the users to work with the Military
 Documentation content:
 
 .. toctree::
-   :glob:
    :maxdepth: 2
 
    installation
    usage
-   *
-
