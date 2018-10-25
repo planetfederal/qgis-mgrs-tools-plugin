@@ -100,6 +100,7 @@ def install(options):
         dst = path(' ~/Library/Application Support/QGIS/QGIS3/profiles/default/python/plugins').expanduser() / plugin_name
     else:
         dst = path('~/.local/share/QGIS/QGIS3/profiles/default/python/plugins').expanduser() / plugin_name
+    print("Destination folder for plugin: " + str(dst))
     src = src.abspath()
     dst = dst.abspath()
     if os.name == 'nt':
