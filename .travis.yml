@@ -10,15 +10,10 @@ env:
   - secure: ysTjTiPxAlXFnyYHv43XQGOvK4EyAxzxEe3XBmMfMrvK+DGmL1e7No1w4jQ4enXWWi/nwr5kYuQlSDSPOnO/5CwZxx11H+Qe9aRcg2qKegXNiWrSWrVAkfa+xvq8NVUO0VzNn3ZZ8YIJu/Su7DxHV9f5WGi4dvZvjI/fxJp3dDg=
   - secure: WSjmuT8OKyXd2QJIaffDmxYDQwqIipiRTyD3xX1s4J/sHnLILXwrwNNSoG6Q9AFgblbmgsKTRfkbkf2uk0KQIX0A8nbMHaG54WuMAdhJ7IRcwZwBRV7FHlAOEjAgyRYstknAN8l90QAJuXNyyBUBge3WWKcAiOKZrzFeTzf7l3s=
   matrix:
-  - QGIS_VERSION_TAG=release PYTHON_EXECUTABLE=python PIP_EXECUTABLE=pip
-  - QGIS_VERSION_TAG=master_2 PYTHON_EXECUTABLE=python PIP_EXECUTABLE=pip
   - QGIS_VERSION_TAG=master PYTHON_EXECUTABLE=python3 PIP_EXECUTABLE=pip3
-matrix:
-  allow_failures:
-  - env: QGIS_VERSION_TAG=master PYTHON_EXECUTABLE=python3 PIP_EXECUTABLE=pip3
 before_install:
-- docker pull boundlessgeo/qgis-testing-environment:${QGIS_VERSION_TAG}
-- docker tag boundlessgeo/qgis-testing-environment:${QGIS_VERSION_TAG} qgis-testing-environment
+- docker pull elpaso/qgis-testing-environment:${QGIS_VERSION_TAG}
+- docker tag elpaso/qgis-testing-environment:${QGIS_VERSION_TAG} qgis-testing-environment
 install:
 - docker run -d --name qgis-testing-environment -v ${TRAVIS_BUILD_DIR}:/tests_directory -e DISPLAY=:99 qgis-testing-environment
 - sleep 10
@@ -45,5 +40,5 @@ after_success:
         echo "Uploading ${RELEASE_ZIPNAME} to QGIS Dev..."
         scp ${PLUGIN_NAME}.zip qgisrepoguest:${UPLOADS}/${RELEASE_ZIPNAME}
         export GIT_REV=$(git rev-parse --short HEAD)
-        ssh qgisrepoguest "${UPDATER} update --dev --role desktop-qgis-plugin-dev --git-hash ${GIT_REV} ${RELEASE_ZIPNAME}"
+        ssh qgisrepoguest "${UPDATER} update --remove-version all --role desktop-qgis-plugin-dev --git-hash ${GIT_REV} qgis-dev ${RELEASE_ZIPNAME}"
     fi
