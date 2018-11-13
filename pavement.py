@@ -4,6 +4,7 @@
 # This code is licensed under the GPL 2.0 license.
 #
 import os
+import sys
 import zipfile
 import shutil
 
@@ -51,7 +52,7 @@ def setup(options):
     runtime, test = read_requirements()
     os.environ['PYTHONPATH']=ext_libs.abspath()
     for req in runtime + test:
-        sh('easy_install -a -d %(ext_libs)s %(dep)s' % {
+        sh('pip3 install -U -t %(ext_libs)s %(dep)s' % {
             'ext_libs' : ext_libs.abspath(),
             'dep' : req
         })
@@ -95,8 +96,11 @@ def install(options):
     src = path(__file__).dirname() / plugin_name
     if os.name == 'nt':
         dst = path('~/AppData/Roaming/QGIS/QGIS3/profiles/default/python/plugins').expanduser() / plugin_name
+    elif sys.platform == 'darwin':
+        dst = path(' ~/Library/Application Support/QGIS/QGIS3/profiles/default/python/plugins').expanduser() / plugin_name
     else:
         dst = path('~/.local/share/QGIS/QGIS3/profiles/default/python/plugins').expanduser() / plugin_name
+    print("Destination folder for plugin: " + str(dst))
     src = src.abspath()
     dst = dst.abspath()
     if os.name == 'nt':
