@@ -60,7 +60,8 @@ def functionalTests():
     mgrsMaptool = Test("Test MRGS map tool")
     mgrsMaptool.addStep("Load test project", lambda: _loadTestProject("map_tools_test"))
     mgrsMaptool.addStep("Select map tool", _setTool)
-    mgrsMaptool.addStep("Click within the upper left polygon. Verify that the computed mrgrs coord starts with 02HLJ'", isVerifyStep=True)
+    mgrsMaptool.addStep("Move the mouse over the map canvas. Verify that the mouse pointer mrgrs coord shows on the bottom-left corner", isVerifyStep=True)
+    mgrsMaptool.addStep("Click within the upper left polygon. Verify that the computed mrgrs coord starts with 02HLJ", isVerifyStep=True)
     mgrsMaptool.addStep("Open a text editor and press 'Ctrl+V'. Confirm that the computed coordinate is pasted", isVerifyStep=True)
 
     mgrsZoomPanel = Test("Test MRGS zoom to panel")
